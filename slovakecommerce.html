@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slovenská e-commerce - Slovak e-commerce</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #18120a;
+  --bg2: #241c12;
+  --bg3: #2e2416;
+  --card: rgba(240,220,180,0.05);
+  --card-hover: rgba(240,220,180,0.09);
+  --border: rgba(240,210,160,0.10);
+  --border-accent: rgba(212,165,90,0.35);
+  --blue: #d4a55a;
+  --blue2: #b8852e;
+  --lime: #7ec8a0;
+  --lime2: #5aaa7c;
+  --white: #f0e8d8;
+  --white70: rgba(240,232,216,0.72);
+  --white40: rgba(240,232,216,0.45);
+  --white20: rgba(240,232,216,0.22);
+  --white10: rgba(240,232,216,0.11);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── NOISE OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ─── GRID LINES ─── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(212,165,90,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,165,90,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 18px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(24,18,10,0.88);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.logo-icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+.logo-text {
+  font-family: 'Sora', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.logo-text span { color: var(--blue); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white40);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--blue); }
+
+.nav-cta {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--blue);
+  padding: 8px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* ─── HERO ─── */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 60px 80px;
+  overflow: hidden;
+}
+
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+.hero-glow-1 {
+  width: 700px; height: 500px;
+  background: rgba(212,165,90,0.12);
+  top: -100px; left: -200px;
+}
+.hero-glow-2 {
+  width: 500px; height: 400px;
+  background: rgba(126,200,160,0.07);
+  bottom: 0; right: -100px;
+}
+.hero-glow-3 {
+  width: 300px; height: 300px;
+  background: rgba(180,120,40,0.10);
+  top: 40%; left: 40%;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blue);
+  background: rgba(212,165,90,0.1);
+  border: 1px solid rgba(212,165,90,0.22);
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 32px;
+  width: fit-content;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--blue);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(52px, 7vw, 96px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -2.5px;
+  margin-bottom: 28px;
+  max-width: 900px;
+}
+
+h1 em {
+  font-style: normal;
+  color: var(--blue);
+  display: block;
+}
+
+.hero-sub {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 300;
+  color: var(--white70);
+  max-width: 640px;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.hero-byline {
+  font-size: 13px;
+  color: var(--white40);
+  margin-bottom: 56px;
+  font-family: 'DM Mono', monospace;
+}
+
+.hero-byline strong {
+  color: var(--white70);
+  font-weight: 500;
+}
+
+/* Hero stats strip */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 900px;
+}
+
+.hero-stat {
+  background: var(--card);
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.hero-stat:hover { background: var(--card-hover); }
+
+.hero-stat::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.hero-stat:hover::before { opacity: 1; }
+
+.stat-num {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stat-num.lime { color: var(--lime); }
+.stat-num.white { color: var(--white); }
+
+.stat-label {
+  font-size: 12px;
+  color: var(--white40);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+}
+
+.stat-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  margin-top: 6px;
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.stat-change.up {
+  background: rgba(126,200,160,0.12);
+  color: var(--lime);
+}
+.stat-change.down {
+  background: rgba(255,80,80,0.12);
+  color: #ff6060;
+}
+
+/* ─── SECTIONS ─── */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 100px 60px;
+}
+
+section:nth-child(even) {
+  background: rgba(240,220,180,0.025);
+}
+
+.section-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-tag::before {
+  content: '';
+  display: block;
+  width: 24px; height: 1px;
+  background: var(--blue);
+}
+
+h2 {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(32px, 4vw, 54px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+
+h2 span { color: var(--blue); }
+h2 em { font-style: normal; color: var(--lime); }
+
+.section-lead {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--white70);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 60px;
+}
+
+/* ─── CARDS ─── */
+.card-grid {
+  display: grid;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+.card {
+  background: var(--card);
+  padding: 32px 28px;
+  transition: background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover { background: var(--card-hover); }
+
+.card-num {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.card-num.lime { color: var(--lime); }
+.card-num.white { color: #fff; }
+
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white70);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: 'DM Mono', monospace;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--white40);
+  line-height: 1.6;
+}
+
+.card-badge {
+  position: absolute;
+  top: 16px; right: 16px;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: rgba(212,165,90,0.1);
+  border: 1px solid rgba(212,165,90,0.22);
+  color: var(--blue);
+}
+
+.card-badge.lime-badge {
+  background: rgba(126,200,160,0.1);
+  border-color: rgba(126,200,160,0.22);
+  color: var(--lime);
+}
+
+/* ─── CHART BARS ─── */
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bar-label {
+  font-size: 12px;
+  color: var(--white70);
+  width: 180px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.bar-track {
+  flex: 1;
+  height: 28px;
+  background: rgba(240,210,160,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--blue2), var(--blue));
+  position: relative;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bar-fill.lime-fill {
+  background: linear-gradient(90deg, var(--lime2), var(--lime));
+}
+
+.bar-fill.dim-fill {
+  background: rgba(240,210,160,0.14);
+}
+
+.bar-pct {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--white40);
+  width: 36px;
+  flex-shrink: 0;
+}
+
+/* ─── DONUT ─── */
+.donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--white70);
+}
+
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── TWO COL ─── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ─── HIGHLIGHT BOX ─── */
+.highlight-box {
+  background: linear-gradient(135deg, rgba(212,165,90,0.09), rgba(212,165,90,0.03));
+  border: 1px solid rgba(212,165,90,0.22);
+  border-radius: 16px;
+  padding: 36px 40px;
+  margin: 32px 0;
+}
+
+.highlight-box.lime-box {
+  background: linear-gradient(135deg, rgba(126,200,160,0.09), rgba(126,200,160,0.03));
+  border-color: rgba(126,200,160,0.22);
+}
+
+.highlight-box .big-quote {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(20px, 2.5vw, 30px);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.highlight-box .big-quote span { color: var(--blue); }
+.highlight-box .big-quote em { font-style: normal; color: var(--lime); }
+
+/* ─── LEVOSPHERE SECTION ─── */
+.levo-section {
+  background: linear-gradient(180deg, rgba(212,165,90,0.04) 0%, transparent 100%);
+}
+
+.levo-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.levo-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+  background: rgba(126,200,160,0.1);
+  border: 1px solid rgba(126,200,160,0.2);
+  padding: 6px 16px;
+  border-radius: 100px;
+}
+
+/* ─── PLATFORM BUBBLES ─── */
+.platform-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.platform-bubble {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 20px;
+  transition: border-color 0.2s;
+}
+
+.platform-bubble:hover {
+  border-color: var(--border-accent);
+}
+
+.platform-pct {
+  font-family: 'Sora', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--blue);
+  letter-spacing: -1px;
+}
+
+.platform-name {
+  font-size: 13px;
+  color: var(--white70);
+}
+
+/* ─── TREND ITEMS ─── */
+.trend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.trend-item {
+  background: var(--card);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: background 0.2s;
+}
+
+.trend-item:hover { background: var(--card-hover); }
+
+.trend-rank {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--white20);
+  width: 20px;
+}
+
+.trend-icon {
+  font-size: 20px;
+  width: 36px;
+  text-align: center;
+}
+
+.trend-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--white70);
+}
+
+.trend-val {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.trend-val.up { color: var(--lime); }
+.trend-val.down { color: #ff6060; }
+
+/* ─── DOPRAVA ─── */
+.doprava-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.doprava-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+}
+
+.doprava-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.doprava-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--white);
+}
+
+.doprava-desc {
+  font-size: 13px;
+  color: var(--white40);
+  line-height: 1.6;
+}
+
+/* ─── EUROSTAT ─── */
+.eurostat-compare {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.ec-item {
+  background: var(--card);
+  padding: 28px 24px;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.ec-item:hover { background: var(--card-hover); }
+
+.ec-item.highlight-item {
+  background: linear-gradient(135deg, rgba(212,165,90,0.1), rgba(0,200,255,0.04));
+  border-right: none;
+}
+
+.ec-flag {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.ec-pct {
+  font-family: 'Sora', sans-serif;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.ec-pct.lime { color: var(--lime); }
+
+.ec-country {
+  font-size: 12px;
+  color: var(--white40);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.06em;
+}
+
+.ec-note {
+  font-size: 11px;
+  color: var(--blue);
+  margin-top: 6px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ─── LEVO VÝZVY ─── */
+.vyzvy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.vyzva-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.vyzva-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue), transparent);
+}
+
+.vyzva-pct {
+  font-family: 'Sora', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.vyzva-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white70);
+  line-height: 1.4;
+}
+
+/* ─── KONSOLIDACIA ─── */
+.kons-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+}
+
+.kons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kons-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.kons-pct {
+  font-family: 'Sora', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #ff6060;
+  width: 50px;
+  flex-shrink: 0;
+}
+
+.kons-pct.neutral { color: var(--white40); }
+
+.kons-text {
+  font-size: 13px;
+  color: var(--white70);
+}
+
+/* ─── NALADA METER ─── */
+.nalada-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nalada-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nalada-label { font-size: 13px; color: var(--white40); }
+.nalada-val {
+  font-family: 'Sora', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--lime);
+}
+
+.sentiment-bar {
+  height: 8px;
+  background: rgba(240,210,160,0.06);
+  border-radius: 100px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.sentiment-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #c84040 0%, rgba(240,220,180,0.15) 40%, var(--lime) 100%);
+  width: 100%;
+}
+
+.sentiment-pointer {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+/* ─── AI SECTION ─── */
+.ai-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ai-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  transition: border-color 0.2s;
+}
+
+.ai-item:hover { border-color: var(--border-accent); }
+
+.ai-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ai-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--blue2), var(--blue));
+}
+
+.ai-name {
+  font-size: 13px;
+  color: var(--white70);
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.ai-pct {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--blue);
+  width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ─── TIMELINE ─── */
+.timeline {
+  position: relative;
+  padding-left: 32px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, var(--blue), transparent);
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 32px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -36px; top: 4px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 12px rgba(0,200,255,0.5);
+}
+
+.timeline-year {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--blue);
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.timeline-val {
+  font-family: 'Sora', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 4px;
+}
+
+.timeline-desc {
+  font-size: 13px;
+  color: var(--white40);
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 60px 60px 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footer-brand .logo-text {
+  font-size: 18px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.footer-desc {
+  font-size: 14px;
+  color: var(--white40);
+  line-height: 1.7;
+  max-width: 380px;
+  margin-bottom: 24px;
+}
+
+.footer-cta-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--blue);
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+  width: fit-content;
+}
+
+.footer-cta:hover { opacity: 0.85; }
+
+.footer-cta.outline {
+  background: transparent;
+  color: var(--blue);
+  border: 1px solid rgba(212,165,90,0.3);
+}
+
+.footer-col h4 {
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white70);
+  margin-bottom: 16px;
+  letter-spacing: 0.02em;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-links a {
+  font-size: 13px;
+  color: var(--white40);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--blue); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: var(--white20);
+  font-family: 'DM Mono', monospace;
+}
+
+.footer-sources {
+  font-size: 11px;
+  color: var(--white20);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ─── SIGNATURE ─── */
+.sig-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  max-width: 480px;
+  margin-top: 24px;
+}
+
+.sig-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.sig-role {
+  font-size: 12px;
+  color: var(--blue);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.sig-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sig-contact a {
+  font-size: 13px;
+  color: var(--white40);
+  text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  transition: color 0.2s;
+}
+
+.sig-contact a:hover { color: var(--blue); }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(212,165,90,0.3); border-radius: 2px; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  section { padding: 60px 24px; }
+  #hero { padding: 100px 24px 60px; }
+  h1 { font-size: 44px; letter-spacing: -2px; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-3, .card-grid-4, .three-col, .vyzvy-grid { grid-template-columns: 1fr; }
+  .card-grid-2, .two-col, .kons-grid, .doprava-grid { grid-template-columns: 1fr; }
+  .eurostat-compare { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .bar-label { width: 130px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="8" fill="rgba(212,165,90,0.1)"/>
+        <path d="M8 18 L18 8 L28 18" stroke="#d4a55a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M11 21 L18 14 L25 21" stroke="#d4a55a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+        <rect x="14" y="23" width="8" height="7" rx="1.5" fill="#d4a55a" opacity="0.8"/>
+        <circle cx="27" cy="27" r="3" fill="#7ec8a0"/>
+      </svg>
+    </div>
+    <div class="logo-text">Slovak<span>e-commerce</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#trh">Trh</a></li>
+    <li><a href="#platformy">Platformy</a></li>
+    <li><a href="#spolocnosti">E-shopári</a></li>
+    <li><a href="#doprava">Doprava</a></li>
+    <li><a href="#levosphere">Levosphere</a></li>
+    <li><a href="#eurostat">Eurostat</a></li>
+  </ul>
+  <a href="mailto:pr@slovakecommerce.sk" class="nav-cta">Spolupráca →</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <div class="hero-glow hero-glow-3"></div>
+
+  <div class="hero-tag">Slovak e-commerce · Ročná správa 2024</div>
+
+  <h1 class="fade-up">
+    Slovenský<br>
+    <em>e&#8209;commerce trh</em>
+  </h1>
+
+  <p class="hero-sub fade-up delay-1">
+    86 % Slovákov online nakupuje. Obrat trhu sa vrátil k rastu. Slovensko je lídrom CEE regiónu. Toto sú dáta, ktoré formujú digitálny obchod.
+  </p>
+
+  <p class="hero-byline fade-up delay-2">
+    Prináša <strong>Slovak e-commerce</strong> · Dáta: Heureka Group, Shoptet, Levosphere, Eurostat, Štatistický úrad SR
+  </p>
+
+  <div class="hero-stats fade-up delay-3">
+    <div class="hero-stat">
+      <div class="stat-num">€1,84</div>
+      <div style="font-size:13px;color:var(--white40);margin-bottom:6px;">mld</div>
+      <div class="stat-label">Obrat e-commerce 2024</div>
+      <div class="stat-change up">▲ +6 % YoY</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-num lime">13 000 - 17 000</div>
+      <div class="stat-label">Aktívnych e-shopov</div>
+      <div class="stat-change down">▼ čistenie trhu</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-num">€85</div>
+      <div class="stat-label">Priem. hodnota objednávky</div>
+      <div class="stat-change up">▲ +13 % YoY</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-num white">86%</div>
+      <div class="stat-label">Slovákov nakupuje online</div>
+      <div class="stat-change up">#1 v CEE</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRHY -->
+<section id="trh">
+  <div class="section-tag">Obrat a rast trhu</div>
+  <h2>Trh opäť <span>v zielenom</span></h2>
+  <p class="section-lead">Po korekcii v rokoch 2022–2023 sa slovenský e-commerce v roku 2024 vrátil k rastu. Celkový obrat €1,84 mld je druhým najvyšším v histórii.</p>
+
+  <div class="two-col">
+    <div>
+      <div style="margin-bottom:40px;">
+        <div class="section-tag" style="margin-bottom:20px;">Historický vývoj obratu</div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-year">2020</div>
+            <div class="timeline-val" style="color:var(--white70)">~€1,5 mld</div>
+            <div class="timeline-desc">Covidový boom, rast +40%</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2021 · REKORD</div>
+            <div class="timeline-val" style="color:var(--lime)">€2,08 mld</div>
+            <div class="timeline-desc">Absolútny rekord v histórii slovenského e-commerce</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2022</div>
+            <div class="timeline-val" style="color:#ff6060">€1,81 mld</div>
+            <div class="timeline-desc">Prvý historický pokles −13 % (inflácia, energie)</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2023</div>
+            <div class="timeline-val" style="color:var(--white70)">€1,73 mld</div>
+            <div class="timeline-desc">Pokračujúca korekcia</div>
+          </div>
+          <div class="timeline-item" style="padding-bottom:0">
+            <div class="timeline-year">2024</div>
+            <div class="timeline-val" style="color:var(--blue)">€1,84 mld</div>
+            <div class="timeline-desc">Návrat rastu +6 %, Q4: +7 %</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="margin-bottom:32px;">
+        <div class="section-tag" style="margin-bottom:20px;">Rast segmentov 2024 · Shoptet</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">Potraviny</div>
+            <div class="bar-track"><div class="bar-fill lime-fill" style="width:84%"></div></div>
+            <div class="bar-pct">+42%</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Kozmetika / parfumy</div>
+            <div class="bar-track"><div class="bar-fill" style="width:78%"></div></div>
+            <div class="bar-pct">+39%</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Zvieratá</div>
+            <div class="bar-track"><div class="bar-fill" style="width:64%"></div></div>
+            <div class="bar-pct">+32%</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Šport / turistika</div>
+            <div class="bar-track"><div class="bar-fill" style="width:52%"></div></div>
+            <div class="bar-pct">+26%</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Šperky / hodinky</div>
+            <div class="bar-track"><div class="bar-fill" style="width:42%"></div></div>
+            <div class="bar-pct">+21%</div>
+          </div>
+
+          <div class="bar-row">
+            <div class="bar-label">Elektronika</div>
+            <div class="bar-track"><div class="bar-fill dim-fill" style="width:10%"></div></div>
+            <div class="bar-pct" style="color:#ff6060">−5%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="big-quote">Najsilnejší Q4 rástol <span>+7 %</span> - Slováci na Vianoce 2024 nešetrili. Špičkovým nákupným dňom bol <span>10. december</span>, utorok.</div>
+    <p style="font-size:13px;color:var(--white40)">Zdroj: Heureka Group, Shoptet · Január 2025</p>
+  </div>
+
+  <div style="margin-top:48px;">
+    <div class="section-tag" style="margin-bottom:24px;">Top kategórie podľa podielu na obrate · Heureka Group</div>
+    <div class="card-grid card-grid-4">
+      <div class="card">
+        <div class="card-badge">1.</div>
+        <div class="card-num">21,1%</div>
+        <div class="card-title">Elektronika</div>
+        <div class="card-desc">Najsilnejšia kategória napriek 5% poklesu</div>
+      </div>
+      <div class="card">
+        <div class="card-badge">2.</div>
+        <div class="card-num lime">13,8%</div>
+        <div class="card-title">Dielňa, stavba, záhrada</div>
+        <div class="card-desc">Q2 rástla o 50 % medziročne</div>
+      </div>
+      <div class="card">
+        <div class="card-badge">3.</div>
+        <div class="card-num white">9,1%</div>
+        <div class="card-title">Auto-moto</div>
+        <div class="card-desc">Dlhodobo rastúci segment</div>
+      </div>
+      <div class="card">
+        <div class="card-badge lime-badge">↑ skokan</div>
+        <div class="card-num lime">+1137%</div>
+        <div class="card-title">Solárne zostavy</div>
+        <div class="card-desc">Historický rekord rastu kategórie na Slovensku</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMY -->
+<section id="platformy">
+  <div class="section-tag">E-shopové riešenia</div>
+  <h2>Kto stojí za <span>slovenským</span> e-commerce</h2>
+  <p class="section-lead">Na Slovensku je ~15 400 e-shopov. WooCommerce dominuje počtom, no Shoptet vedie v tržbách malých a stredných obchodov.</p>
+
+  <div class="two-col">
+    <div>
+      <div class="section-tag" style="margin-bottom:20px;">Počet e-shopov podľa platformy · BuiltWith.com</div>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <div class="bar-label">Shoptet</div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+          <div class="bar-pct">7 431</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">WooCommerce</div>
+          <div class="bar-track"><div class="bar-fill dim-fill" style="width:74%"></div></div>
+          <div class="bar-pct" style="color:var(--white70)">5 481</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Cart Functionality</div>
+          <div class="bar-track"><div class="bar-fill dim-fill" style="width:66%"></div></div>
+          <div class="bar-pct" style="color:var(--white70)">4 875</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Shopify</div>
+          <div class="bar-track"><div class="bar-fill dim-fill" style="width:33%"></div></div>
+          <div class="bar-pct" style="color:var(--white40)">2 423</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Wix Stores</div>
+          <div class="bar-track"><div class="bar-fill dim-fill" style="width:27%"></div></div>
+          <div class="bar-pct" style="color:var(--white40)">2 038</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">PrestaShop</div>
+          <div class="bar-track"><div class="bar-fill dim-fill" style="width:27%"></div></div>
+          <div class="bar-pct" style="color:var(--white40)">1 970</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">OpenCart</div>
+          <div class="bar-track"><div class="bar-fill dim-fill" style="width:16%"></div></div>
+          <div class="bar-pct" style="color:var(--white40)">1 196</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">eShop Rychle</div>
+          <div class="bar-track"><div class="bar-fill dim-fill" style="width:15%"></div></div>
+          <div class="bar-pct" style="color:var(--white40)">1 106</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">SmartWeb</div>
+          <div class="bar-track"><div class="bar-fill dim-fill" style="width:12%"></div></div>
+          <div class="bar-pct" style="color:var(--white40)">869</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">UpGates</div>
+          <div class="bar-track"><div class="bar-fill dim-fill" style="width:11%"></div></div>
+          <div class="bar-pct" style="color:var(--white40)">853</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-tag" style="margin-bottom:20px;">Zaujímavosť: Zaujímavosť: Shopify skončil na 4. mieste</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 24px;margin-bottom:20px;">
+        <div style="font-size:13px;color:var(--white40);margin-bottom:8px;font-family:'DM Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;">Shopify skončil na 4. mieste</div>
+        <div style="font-family:'Sora',sans-serif;font-size:36px;font-weight:800;color:var(--white);letter-spacing:-1px;margin-bottom:8px;">4. miesto</div>
+        <p style="font-size:13px;color:var(--white40);line-height:1.6;">Kým vo väčšine krajín EÚ je Shopify na 2. mieste, na Slovensku ho predbehol <span style="color:var(--blue)">Shoptet</span> - česká platforma s výraznou prítomnosťou v CEE regióne.</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 24px;">
+        <div style="font-size:13px;color:var(--white40);margin-bottom:8px;font-family:'DM Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;">Shoptet · 2025</div>
+        <div class="card-grid card-grid-2" style="border:none;background:transparent;gap:16px;margin-top:8px;">
+          <div style="background:rgba(212,165,90,0.07);border:1px solid rgba(212,165,90,0.15);border-radius:10px;padding:16px;">
+            <div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--blue);letter-spacing:-1px;">7 500</div>
+            <div style="font-size:12px;color:var(--white40);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">e-shopov</div>
+          </div>
+          <div style="background:rgba(126,200,160,0.07);border:1px solid rgba(126,200,160,0.15);border-radius:10px;padding:16px;">
+            <div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--lime);letter-spacing:-1px;">~€500M</div>
+            <div style="font-size:12px;color:var(--white40);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">obrat 2024</div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--white40);margin-top:12px;">Shoptet je naďalej najobľúbenejším riešením pre širokú vrstvu e-shopárov na Slovensku.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- E-SHOPÁRI -->
+<section id="spolocnosti">
+  <div class="section-tag">Profil trhu</div>
+  <h2>Typický slovenský <em>e-shopár</em></h2>
+  <p class="section-lead">~75 % e-shopov má menej ako 5 zamestnancov. Trh sa konsoliduje - nových hráčov pribúda menej, ale tí existujúci rastú.</p>
+
+  <div class="card-grid card-grid-2" style="margin-bottom:40px;">
+    <div class="card">
+      <div class="card-num">5,5M</div>
+      <div class="card-title">Objednávky / rok · Shoptet</div>
+      <div class="card-desc">Medziročný nárast +16 %, rekordný počet</div>
+    </div>
+    <div class="card">
+      <div class="card-num lime">€85</div>
+      <div class="card-title">Priem. hodnota objednávky</div>
+      <div class="card-desc">Z €75 v roku 2023 - rast prekonáva infláciu</div>
+    </div>
+
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div class="section-tag" style="margin-bottom:20px;">Profil e-shopára 2025 · Levosphere</div>
+      <div class="trend-list">
+        <div class="trend-item">
+          <span class="trend-rank">01</span>
+          <span class="trend-icon">🧑‍💼</span>
+          <span class="trend-name">72 % sú majitelia e-shopu (nie manažéri)</span>
+          <span class="trend-val" style="color:var(--blue)">72%</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-rank">02</span>
+          <span class="trend-icon">👥</span>
+          <span class="trend-name">55 % má menej ako 3 zamestnancov</span>
+          <span class="trend-val" style="color:var(--white70)">55%</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-rank">03</span>
+          <span class="trend-icon">🇸🇰</span>
+          <span class="trend-name">46 % predáva výhradne na slovenskom trhu</span>
+          <span class="trend-val" style="color:var(--white70)">46%</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-rank">04</span>
+          <span class="trend-icon">🌍</span>
+          <span class="trend-name">65 % plánuje expanziu do zahraničia</span>
+          <span class="trend-val" style="color:var(--lime)">65%</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-rank">05</span>
+          <span class="trend-icon">🏪</span>
+          <span class="trend-name">46 % e-shopov má aj kamennú predajňu</span>
+          <span class="trend-val" style="color:var(--white70)">46%</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-rank">06</span>
+          <span class="trend-icon">🏷️</span>
+          <span class="trend-name">66 % predáva produkty pod vlastnou značkou</span>
+          <span class="trend-val" style="color:var(--blue)">66%</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-tag" style="margin-bottom:20px;">Top 5 inspiratívnych e-shopov · Levosphere</div>
+      <div class="trend-list" style="margin-bottom:24px;">
+        <div class="trend-item">
+          <span class="trend-rank">1.</span>
+          <span class="trend-icon">🟡</span>
+          <span class="trend-name" style="font-weight:600;color:var(--white)">alza.sk</span>
+          <span class="trend-val" style="color:var(--lime)">37%</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-rank">2.</span>
+          <span class="trend-icon">🟢</span>
+          <span class="trend-name" style="font-weight:600;color:var(--white)">gymbeam.sk</span>
+          <span class="trend-val" style="color:var(--blue)">25%</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-rank">3.</span>
+          <span class="trend-icon">📚</span>
+          <span class="trend-name">martinus.sk</span>
+          <span class="trend-val" style="color:var(--white70)">6%</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-rank">4.</span>
+          <span class="trend-icon">💊</span>
+          <span class="trend-name">aktin.sk</span>
+          <span class="trend-val" style="color:var(--white70)">6%</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-rank">5.</span>
+          <span class="trend-icon">🚵</span>
+          <span class="trend-name">mtbiker.sk</span>
+          <span class="trend-val" style="color:var(--white70)">4%</span>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid rgba(126,200,160,0.2);border-radius:12px;padding:20px 20px;">
+        <div style="font-size:13px;color:var(--white40);margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;">AI adopcia 2025</div>
+        <div style="font-family:'Sora',sans-serif;font-size:44px;font-weight:800;color:var(--lime);letter-spacing:-2px;line-height:1;margin-bottom:8px;">84%</div>
+        <p style="font-size:13px;color:var(--white40);">e-shopov aktívne využíva AI nástroje - najmä na tvorbu obsahu (76 %), interné konzultácie (38 %) a preklady (31 %)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOPRAVA A PLATBY -->
+<section id="doprava">
+  <div class="section-tag">Doprava a platby</div>
+  <h2>Ako sa <span>doručuje</span> a platí</h2>
+  <p class="section-lead">Packeta je lídrom, dobierka postupne ustupuje platbám kartou. Z-BOXy zažívajú explozívny rast.</p>
+
+  <div class="doprava-grid" style="margin-bottom:40px;">
+    <div class="doprava-card">
+      <div class="doprava-icon">📦</div>
+      <div class="doprava-title">Packeta Slovakia</div>
+      <p class="doprava-desc">Lídrom dopravy. Tržby €67 mil v 2024 (+16 %). Rekord: 1,1 mil. zásielok za jeden deň (16. 12. 2024). 131 mil. zásielok prepravených celkovo.</p>
+    </div>
+    <div class="doprava-card">
+      <div class="doprava-icon">🤖</div>
+      <div class="doprava-title">Z-BOX revolúcia</div>
+      <p class="doprava-desc">57 % zákazníkov si vyberá výdajné miesta alebo Z-BOXy. Packeta zdvojnásobila počet schránok - 142 000 boxov, 9× viac ako konkurencia.</p>
+    </div>
+    <div class="doprava-card">
+      <div class="doprava-icon">💳</div>
+      <div class="doprava-title">Platby: karty rastú</div>
+      <p class="doprava-desc">96 % top e-shopov ponúka platbu Visa/Mastercard. Dobierka stále populárna, ale jej podiel klesá. Digitálne peňaženky na vzostupe.</p>
+    </div>
+    <div class="doprava-card">
+      <div class="doprava-icon">🏪</div>
+      <div class="doprava-title">Výdajné miesta</div>
+      <p class="doprava-desc">Najširšia sieť na Slovensku. Spolupráca s Lidl a Kaufland. Zákazníci si vyzdvihujú z-BOXy spravidla v deň doručenia.</p>
+    </div>
+  </div>
+
+  <div class="highlight-box lime-box">
+    <div class="big-quote">Dobierka sa stále drží, ale <em>57 % doručení</em> smeruje na výdajné miesta a Z-BOXy. Pohodlie víťazí.</div>
+    <p style="font-size:13px;color:var(--white40)">Zdroj: Packeta Slovakia, ecommerceslovakia.sk · 2024</p>
+  </div>
+</section>
+
+<!-- LEVOSPHERE SECTION -->
+<section id="levosphere" class="levo-section">
+  <div class="levo-header">
+    <div class="section-tag" style="margin-bottom:0;">E-commerce prieskum 2025</div>
+    <div class="levo-badge">Levosphere · August 2025 · N=188</div>
+  </div>
+
+  <h2>Nálada, <span>výzvy</span> a <em>marže</em><br>slovenských e-shopov</h2>
+  <p class="section-lead">Prieskum Levosphere (spolupráca Shoptet, CreativeSites, Blueweb) - 188 respondentov, júl 2025. Pohľad zvnútra na finančnú realitu e-shopárov.</p>
+
+  <!-- Nálada -->
+  <div class="two-col" style="margin-bottom:60px;">
+    <div>
+      <div class="section-tag" style="margin-bottom:20px;">Aktuálna nálada</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:32px 28px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">
+          <div>
+            <div style="font-size:12px;color:var(--white40);font-family:'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Celkové skóre</div>
+            <div style="font-family:'Sora',sans-serif;font-size:56px;font-weight:800;color:var(--lime);letter-spacing:-2px;line-height:1;">0,9</div>
+            <div style="font-size:13px;color:var(--white40);">na škále −5 až +5</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px;color:var(--white40);font-family:'DM Mono',monospace;margin-bottom:8px;">Optimistická</div>
+            <div style="font-family:'Sora',sans-serif;font-size:36px;font-weight:800;color:var(--lime);letter-spacing:-1px;">51%</div>
+            <div style="margin-top:8px;font-size:12px;color:var(--white40);font-family:'DM Mono',monospace;">Pesimistická</div>
+            <div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:#ff6060;letter-spacing:-1px;">19%</div>
+          </div>
+        </div>
+        <div class="sentiment-bar">
+          <div class="sentiment-fill"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--white20);font-family:'DM Mono',monospace;margin-top:6px;">
+          <span>Pesimistická −5</span>
+          <span>Neutrálna 0</span>
+          <span>Optimistická +5</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-tag" style="margin-bottom:20px;">Obrat a zisk 2024</div>
+      <div class="card-grid card-grid-2" style="border:none;background:transparent;gap:16px;margin-bottom:16px;">
+        <div style="background:rgba(126,200,160,0.07);border:1px solid rgba(126,200,160,0.15);border-radius:12px;padding:22px 20px;">
+          <div style="font-family:'Sora',sans-serif;font-size:44px;font-weight:800;color:var(--lime);letter-spacing:-2px;line-height:1;margin-bottom:6px;">60%</div>
+          <div style="font-size:12px;color:var(--white40);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">e-shopov rástlo YoY</div>
+        </div>
+        <div style="background:rgba(255,96,96,0.06);border:1px solid rgba(255,96,96,0.15);border-radius:12px;padding:22px 20px;">
+          <div style="font-family:'Sora',sans-serif;font-size:44px;font-weight:800;color:#ff6060;letter-spacing:-2px;line-height:1;margin-bottom:6px;">20%</div>
+          <div style="font-size:12px;color:var(--white40);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">skončilo v strate</div>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 20px;">
+        <div style="font-size:12px;color:var(--white40);font-family:'DM Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;">Distribúcia obratu</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span style="background:rgba(212,165,90,0.1);border:1px solid rgba(212,165,90,0.2);color:var(--blue);font-size:12px;padding:4px 12px;border-radius:100px;font-family:'DM Mono',monospace;">67% pod €300k</span>
+          <span style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white70);font-size:12px;padding:4px 12px;border-radius:100px;font-family:'DM Mono',monospace;">17% €300k–1M</span>
+          <span style="background:rgba(180,255,60,0.1);border:1px solid rgba(126,200,160,0.2);color:var(--lime);font-size:12px;padding:4px 12px;border-radius:100px;font-family:'DM Mono',monospace;">10% nad €1M</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marže -->
+  <div style="margin-bottom:60px;">
+    <div class="section-tag" style="margin-bottom:24px;">Priemerná maržovosť produktov</div>
+    <div class="two-col">
+      <div>
+        <div class="highlight-box" style="margin-top:0;">
+          <div class="big-quote">Väčšina e-shopov má maržu <span>20–50 %</span>. Najčastejšia skupina (22 %) je v pásme 21–30 %.</div>
+          <p style="font-size:13px;color:var(--white40);margin-top:8px;">Len 4 % e-shopov pracuje s maržou do 10 %. Extrém nad 76 % dosiahuje 7 % e-shopov.</p>
+        </div>
+      </div>
+      <div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label" style="width:80px;">1–10 %</div>
+            <div class="bar-track"><div class="bar-fill dim-fill" style="width:8%"></div></div>
+            <div class="bar-pct">4%</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label" style="width:80px;">11–20 %</div>
+            <div class="bar-track"><div class="bar-fill dim-fill" style="width:30%"></div></div>
+            <div class="bar-pct">15%</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label" style="width:80px;">21–30 %</div>
+            <div class="bar-track"><div class="bar-fill" style="width:44%"></div></div>
+            <div class="bar-pct">22%</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label" style="width:80px;">31–40 %</div>
+            <div class="bar-track"><div class="bar-fill" style="width:36%"></div></div>
+            <div class="bar-pct">18%</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label" style="width:80px;">41–50 %</div>
+            <div class="bar-track"><div class="bar-fill" style="width:36%"></div></div>
+            <div class="bar-pct">18%</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label" style="width:80px;">51–75 %</div>
+            <div class="bar-track"><div class="bar-fill lime-fill" style="width:30%"></div></div>
+            <div class="bar-pct">15%</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label" style="width:80px;">76–100 %</div>
+            <div class="bar-track"><div class="bar-fill lime-fill" style="width:14%"></div></div>
+            <div class="bar-pct">7%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Výzvy -->
+  <div style="margin-bottom:60px;">
+    <div class="section-tag" style="margin-bottom:24px;">Najväčšie biznisové výzvy 2025</div>
+    <div class="vyzvy-grid">
+      <div class="vyzva-card">
+        <div class="vyzva-pct">17%</div>
+        <div class="vyzva-name">Expanzia, rozširovanie na nové trhy</div>
+      </div>
+      <div class="vyzva-card">
+        <div class="vyzva-pct">16%</div>
+        <div class="vyzva-name">Zvýšiť tržby, obrat a predaje</div>
+      </div>
+      <div class="vyzva-card">
+        <div class="vyzva-pct">16%</div>
+        <div class="vyzva-name">Procesy, optimalizácia, digitalizácia</div>
+      </div>
+      <div class="vyzva-card" style="border-color:rgba(255,96,96,0.2);">
+        <div class="vyzva-pct" style="color:#ff6060">12%</div>
+        <div class="vyzva-name">Pokles tržieb, predaja a obratu</div>
+      </div>
+      <div class="vyzva-card">
+        <div class="vyzva-pct">8%</div>
+        <div class="vyzva-name">Propagácia značky a produktov</div>
+      </div>
+      <div class="vyzva-card" style="border-color:rgba(255,96,96,0.2);">
+        <div class="vyzva-pct" style="color:#ff6060">8%</div>
+        <div class="vyzva-name">Zásahy vlády, ekonomická situácia, nižšia kúpyschopnosť</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Konsolidácia -->
+  <div>
+    <div class="section-tag" style="margin-bottom:24px;">Dopad konsolidačných opatrení na e-shopy</div>
+    <div class="kons-grid">
+      <div>
+        <div class="highlight-box" style="margin-top:0;margin-bottom:24px;">
+          <div class="big-quote"><span>75 %</span> e-shopov uvádza negatívny dopad konsolidačných opatrení - najčastejšie nižšie tržby, menší dopyt, vyššie náklady.</div>
+        </div>
+        <div class="kons-list">
+          <div class="kons-item">
+            <div class="kons-pct">28%</div>
+            <div class="kons-text">Negatívne všeobecne</div>
+          </div>
+          <div class="kons-item">
+            <div class="kons-pct">20%</div>
+            <div class="kons-text">Nižšie tržby, dopyt, menej objednávok</div>
+          </div>
+          <div class="kons-item">
+            <div class="kons-pct">14%</div>
+            <div class="kons-text">Vyššie náklady</div>
+          </div>
+          <div class="kons-item">
+            <div class="kons-pct">9%</div>
+            <div class="kons-text">Zníženie ziskovosti</div>
+          </div>
+          <div class="kons-item">
+            <div class="kons-pct">8%</div>
+            <div class="kons-text">Zvýšenie cien</div>
+          </div>
+          <div class="kons-item">
+            <div class="kons-pct neutral">17%</div>
+            <div class="kons-text" style="color:var(--white40)">Nedotkli, zatiaľ nijako</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-tag" style="margin-bottom:16px;">Hlavné témy ovplyvňujúce náladu</div>
+        <div class="card-grid card-grid-2" style="border:none;background:transparent;gap:12px;">
+          <div style="background:rgba(255,96,96,0.08);border:1px solid rgba(255,96,96,0.2);border-radius:10px;padding:18px 16px;text-align:center;">
+            <div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:#ff6060;letter-spacing:-1px;margin-bottom:4px;">80%</div>
+            <div style="font-size:11px;color:var(--white40);font-family:'DM Mono',monospace;letter-spacing:0.06em;line-height:1.4;text-transform:uppercase;">Daň z fin. transakcií</div>
+          </div>
+          <div style="background:rgba(255,96,96,0.06);border:1px solid rgba(255,96,96,0.15);border-radius:10px;padding:18px 16px;text-align:center;">
+            <div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:#ff8060;letter-spacing:-1px;margin-bottom:4px;">75%</div>
+            <div style="font-size:11px;color:var(--white40);font-family:'DM Mono',monospace;letter-spacing:0.06em;line-height:1.4;text-transform:uppercase;">Zvýšenie DPH</div>
+          </div>
+          <div style="background:rgba(255,96,96,0.06);border:1px solid rgba(255,96,96,0.15);border-radius:10px;padding:18px 16px;text-align:center;">
+            <div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:#ff9060;letter-spacing:-1px;margin-bottom:4px;">70%</div>
+            <div style="font-size:11px;color:var(--white40);font-family:'DM Mono',monospace;letter-spacing:0.06em;line-height:1.4;text-transform:uppercase;">Politická reprezentácia</div>
+          </div>
+          <div style="background:rgba(255,96,96,0.05);border:1px solid rgba(255,96,96,0.12);border-radius:10px;padding:18px 16px;text-align:center;">
+            <div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:#ffb060;letter-spacing:-1px;margin-bottom:4px;">57%</div>
+            <div style="font-size:11px;color:var(--white40);font-family:'DM Mono',monospace;letter-spacing:0.06em;line-height:1.4;text-transform:uppercase;">Zmeny daní z príjmov</div>
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--white20);margin-top:12px;font-family:'DM Mono',monospace;">Zdroj: E-commerce prieskum 2025, Levosphere, n=188, júl 2025</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EUROSTAT -->
+<section id="eurostat">
+  <div class="section-tag">Európske porovnanie · Eurostat</div>
+  <h2>Slovensko vs <span>zvyšok EÚ</span></h2>
+  <p class="section-lead">Slováci patria medzi najaktívnejších online nakupujúcich v EÚ. Podľa Eurostatu nakupuje online 85-86 % používateľov internetu na Slovensku - rovnako ako v Česku. Obe krajiny sú na špici CEE regiónu, výrazne nad priemerom EÚ (77 %).</p>
+
+  <div class="eurostat-compare" style="margin-bottom:40px;">
+    <div class="ec-item">
+      <div class="ec-flag">🇮🇪</div>
+      <div class="ec-pct">96%</div>
+      <div class="ec-country">Írsko · 1. miesto EÚ</div>
+    </div>
+    <div class="ec-item">
+      <div class="ec-flag">🇳🇱</div>
+      <div class="ec-pct">94%</div>
+      <div class="ec-country">Holandsko · 2. miesto</div>
+    </div>
+    <div class="ec-item">
+      <div class="ec-flag">🇩🇰</div>
+      <div class="ec-pct">91%</div>
+      <div class="ec-country">Dánsko · 3. miesto</div>
+    </div>
+    <div class="ec-item highlight-item">
+      <div class="ec-flag">🇸🇰</div>
+      <div class="ec-pct" style="color:var(--lime)">86%</div>
+      <div class="ec-country">Slovensko</div>
+      <div class="ec-note">▲ #1 v CEE (spolu s CZ)</div>
+    </div>
+    <div class="ec-item">
+      <div class="ec-flag">🇨🇿</div>
+      <div class="ec-pct" style="color:var(--white70)">86%</div>
+      <div class="ec-country">Česko</div>
+    </div>
+    <div class="ec-item">
+      <div class="ec-flag">🇪🇺</div>
+      <div class="ec-pct" style="color:var(--white40);font-size:28px;">77%</div>
+      <div class="ec-country">Priemer EÚ (2024)</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div class="section-tag" style="margin-bottom:20px;">Zaujímavé dáta · Eurostat 2024/2025</div>
+      <div class="trend-list">
+
+
+        <div class="trend-item">
+          <span class="trend-icon">👗</span>
+          <span class="trend-name">Oblečenie je najčastejší online nákup - 45 % európskych nakupujúcich</span>
+          <span class="trend-val" style="color:var(--blue)">45%</span>
+        </div>
+
+        <div class="trend-item">
+          <span class="trend-icon">📈</span>
+          <span class="trend-name">Za 10 rokov rástol podiel mladých slovenských nakupujúcich (16–24r) z 24 % na 82 %</span>
+          <span class="trend-val" style="color:var(--lime)">+58p.b</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section-tag" style="margin-bottom:20px;">Podiel e-commerce na maloobchode</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 24px;margin-bottom:20px;">
+        <div style="font-size:12px;color:var(--white40);font-family:'DM Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;">Slovensko - podiel 2024</div>
+        <div style="font-family:'Sora',sans-serif;font-size:56px;font-weight:800;color:var(--blue);letter-spacing:-2px;line-height:1;margin-bottom:8px;">5–10%</div>
+        <p style="font-size:13px;color:var(--white40);">Priemer EÚ: 8,39 % z celkového obratu firiem pochádza z online obchodu. Slovensko rastie a v 2025 sa predpokladá dosiahnuť <span style="color:var(--lime)">10–15 %</span>.</p>
+      </div>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo" style="margin-bottom:16px;text-decoration:none;display:flex;align-items:center;gap:12px;">
+        <svg width="32" height="32" viewBox="0 0 36 36" fill="none">
+          <rect width="36" height="36" rx="8" fill="rgba(212,165,90,0.1)"/>
+          <path d="M8 18 L18 8 L28 18" stroke="#d4a55a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M11 21 L18 14 L25 21" stroke="#d4a55a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+          <rect x="14" y="23" width="8" height="7" rx="1.5" fill="#d4a55a" opacity="0.8"/>
+          <circle cx="27" cy="27" r="3" fill="#7ec8a0"/>
+        </svg>
+        <span class="logo-text" style="font-size:18px;">Slovak<span>e-commerce</span></span>
+      </div>
+      <p class="footer-desc">
+        Komplexný prehľad slovenského e-commerce trhu. Zbierame, analyzujeme a prezentujeme dáta, ktoré pomáhajú e-shopárom, médiám a investorom pochopiť digitálny obchod na Slovensku.
+      </p>
+      <div class="footer-cta-block">
+        <a href="mailto:pr@slovakecommerce.sk" class="footer-cta">Spolupráca a médiá →</a>
+        <a href="mailto:pr@slovakecommerce.sk" class="footer-cta outline">pr@slovakecommerce.sk</a>
+      </div>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Sekcie</h4>
+      <ul class="footer-links">
+        <li><a href="#trh">Obrat a rast trhu</a></li>
+        <li><a href="#platformy">E-shopové platformy</a></li>
+        <li><a href="#spolocnosti">Profil e-shopárov</a></li>
+        <li><a href="#doprava">Doprava a platby</a></li>
+        <li><a href="#levosphere">Levosphere prieskum</a></li>
+        <li><a href="#eurostat">Eurostat - EÚ porovnanie</a></li>
+      </ul>
+    </div>
+
+    </div>
+
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Slovak e-commerce · slovakecommerce.sk</div>
+    <div class="footer-sources">Dáta: Heureka Group · Shoptet · Levosphere · Packeta · Eurostat · BuiltWith</div>
+  </div>
+</footer>
+
+<script>
+// Animate bars on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const bars = entry.target.querySelectorAll('.bar-fill, .ai-fill');
+      bars.forEach(bar => {
+        const targetWidth = bar.style.width;
+        bar.style.width = '0%';
+        setTimeout(() => { bar.style.width = targetWidth; }, 100);
+      });
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.bar-chart, .ai-items').forEach(el => observer.observe(el));
+
+// Smooth number count-up for hero stats
+const countUpObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.hero-stat, .card, .vyzva-card, .trend-item').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+  countUpObserver.observe(el);
+});
+
+// Stagger children within grids
+document.querySelectorAll('.card-grid, .vyzvy-grid, .hero-stats').forEach(grid => {
+  const children = grid.children;
+  Array.from(children).forEach((child, i) => {
+    child.style.transitionDelay = `${i * 0.07}s`;
+  });
+});
+</script>
+</body>
+</html>
