@@ -33,12 +33,24 @@
   "redirects": [
     {
       "source": "/(.*)",
-      "has": [{ "type": "host", "value": "www.slovakecommerce.sk" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.slovakecommerce.sk"
+        }
+      ],
       "destination": "https://slovakecommerce.sk/$1",
       "permanent": true
     }
   ],
   "rewrites": [
-    { "source": "/onas", "destination": "/onas/index.html" }
+    {
+      "source": "/onas",
+      "destination": "/onas/index.html"
+    },
+    {
+      "source": "/media-kit",
+      "destination": "/media-kit/index.html"
+    }
   ]
 }
