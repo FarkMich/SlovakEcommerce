@@ -59,11 +59,12 @@
     .logo-text span { color: var(--gold); }
     .nav-back {
       display: flex; align-items: center; gap: 6px;
-      font-family: 'DM Mono', monospace; font-size: 11px;
-      color: var(--white40); text-decoration: none; letter-spacing: 0.06em;
-      transition: color 0.2s;
+      font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500;
+      color: var(--gold); text-decoration: none; letter-spacing: 0.06em;
+      border: 1px solid rgba(212,165,90,0.3); border-radius: 7px;
+      padding: 6px 14px; transition: all 0.2s;
     }
-    .nav-back:hover { color: var(--gold); }
+    .nav-back:hover { background: rgba(212,165,90,0.08); }
     .nav-cta {
       background: var(--gold); color: var(--bg);
       font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700;
@@ -148,7 +149,7 @@
       border: 1px solid rgba(240,210,160,0.10);
       border-radius: 10px; padding: 18px;
     }
-    .pillar-icon { font-size: 20px; margin-bottom: 8px; }
+    .pillar-icon { display:flex; align-items:center; margin-bottom:10px; height:28px; }
     .pillar-title {
       font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 4px;
     }
@@ -266,7 +267,7 @@
     <span class="logo-text">Slovak<span>e-commerce</span></span>
   </a>
   <a class="nav-back" href="/">← Späť na prehľad</a>
-  <a class="nav-cta" href="/cdn-cgi/l/email-protection#78080a380b14170e19131d1b1715151d0a1b1d560b13">Spolupráca →</a>
+  <a class="nav-cta" href="mailto:pr@slovakecommerce.sk">Spolupráca →</a>
 </nav>
 
 <!-- HERO -->
@@ -285,7 +286,7 @@
     <div class="photo-badge">
       <div class="badge-name">Michal Farkaš</div>
       <div class="badge-role">CEO · Slovak e-commerce</div>
-      <a class="badge-email" href="/cdn-cgi/l/email-protection#4c21252f242d200c3f20233a2d27292f232121293e2f29623f27"><span class="__cf_email__" data-cfemail="2c41454f444d406c5f40435a4d47494f434141495e4f49025f47">[email&#160;protected]</span></a>
+      <a class="badge-email" href="mailto:michal@slovakecommerce.sk">michal@slovakecommerce.sk</a>
     </div>
   </div>
 
@@ -296,17 +297,35 @@
 
     <div class="pillars">
       <div class="pillar">
-        <div class="pillar-icon">📊</div>
+        <div class="pillar-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4a55a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+        </div>
         <div class="pillar-title">Dáta</div>
         <div class="pillar-desc">Zbierame dáta z overených zdrojov a robíme z nich zrozumiteľné príbehy</div>
       </div>
       <div class="pillar">
-        <div class="pillar-icon">🤝</div>
+        <div class="pillar-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7ec8a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
         <div class="pillar-title">Komunita</div>
         <div class="pillar-desc">Budujeme priestor pre odborníkov, e-shopárov a partnerov z odvetvia</div>
       </div>
       <div class="pillar">
-        <div class="pillar-icon">📢</div>
+        <div class="pillar-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4a55a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </div>
         <div class="pillar-title">Osveta</div>
         <div class="pillar-desc">Šírime povedomie o stave slovenského trhu cez médiá, podcasty a LinkedIn</div>
       </div>
@@ -385,6 +404,19 @@
     <div class="cta-bar">
       <div>
         <h3>Chcete byť súčasťou príbehu?</h3>
-        <p>Partnerské balíčky sú dostupné od 990 € / rok. Napíšte nám.</p>
+        <p>Máte záujem o spoluprácu? Napíšte nám.</p>
       </div>
-      <a class="btn-gold" href="/cdn-cgi/l/email-protection#03737143706f6c75626866606c6e6e667160662d7068">Kontaktujte nás →</
+      <a class="btn-gold" href="mailto:pr@slovakecommerce.sk">Kontaktujte nás →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">© 2026 Slovak e-commerce · slovakecommerce.sk</span>
+  <a class="footer-back" href="/">← Späť na hlavnú stránku</a>
+</footer>
+
+</body>
+</html>
