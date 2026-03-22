@@ -37,5 +37,8 @@
       "destination": "https://slovakecommerce.sk/$1",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    { "source": "/onas", "destination": "/onas/index.html" }
   ]
 }
