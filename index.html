@@ -72,7 +72,7 @@ nav {
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 18px 60px;
+  padding: 18px max(60px, calc((100% - 1200px) / 2));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -253,6 +253,8 @@ h1 em {
   border-radius: 16px;
   overflow: hidden;
   max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero-stat {
@@ -320,7 +322,7 @@ h1 em {
 section {
   position: relative;
   z-index: 1;
-  padding: 100px 60px;
+  padding: 100px max(60px, calc((100% - 1200px) / 2));
 }
 
 section:nth-child(even) {
@@ -994,7 +996,7 @@ h2 em { font-style: normal; color: var(--lime); }
 footer {
   background: var(--bg2);
   border-top: 1px solid var(--border);
-  padding: 60px 60px 40px;
+  padding: 60px max(60px, calc((100% - 1200px) / 2)) 40px;
   position: relative;
   z-index: 1;
 }
@@ -1441,27 +1443,27 @@ footer {
           <div class="timeline-item">
             <div class="timeline-year">2020</div>
             <div class="timeline-val" style="color:var(--white70)">€1,1 mld</div>
-            <div class="timeline-desc">Covidový boom, nástup online nakupovania</div>
+            <div class="timeline-desc">Nástup e-commerce, rast počas pandémie</div>
           </div>
           <div class="timeline-item">
             <div class="timeline-year">2021</div>
             <div class="timeline-val" style="color:var(--white70)">€1,38 mld</div>
-            <div class="timeline-desc">Pokračujúci rast, konsolidácia trhu</div>
+            <div class="timeline-desc">Konsolidácia trhu, rast +25 %</div>
           </div>
           <div class="timeline-item">
             <div class="timeline-year">2022</div>
             <div class="timeline-val" style="color:var(--white70)">€1,52 mld</div>
-            <div class="timeline-desc">Prvý historický pokles −13 % (inflácia, energie)</div>
+            <div class="timeline-desc">Spomalenie rastu, tlak inflácie a energií</div>
           </div>
           <div class="timeline-item">
             <div class="timeline-year">2023</div>
             <div class="timeline-val" style="color:var(--white70)">€1,73 mld</div>
-            <div class="timeline-desc">Pokračujúca korekcia</div>
+            <div class="timeline-desc">Stabilizácia, rast +14 %</div>
           </div>
           <div class="timeline-item" style="padding-bottom:0">
             <div class="timeline-year">2024</div>
             <div class="timeline-val" style="color:var(--blue)">€1,84 mld</div>
-            <div class="timeline-desc">Návrat rastu +6 %, Q4: +7 %</div>
+            <div class="timeline-desc">Nový rekord, Q4 rástol +7 %</div>
           </div>
         </div>
       </div>
@@ -1645,30 +1647,35 @@ footer {
     </div>
     <div style="margin-top:20px;">
       <div class="section-tag" style="margin-bottom:16px;">Infraštruktúra pod e-commerce · WebSupport</div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;">
-        <div style="display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:start;">
-          <div style="background:rgba(212,165,90,0.07);border:1px solid rgba(212,165,90,0.15);border-radius:10px;padding:24px 22px;">
-            <div style="font-family:'Sora',sans-serif;font-size:52px;font-weight:800;color:var(--lime);letter-spacing:-2px;line-height:1;margin-bottom:10px;">1/3</div>
-            <div style="font-size:13px;color:var(--white70);line-height:1.5;">slovenských e-shopov beží na infraštruktúre WebSupportu</div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:12px;">
-            <div style="background:rgba(240,220,180,0.04);border:1px solid rgba(240,210,160,0.10);border-radius:10px;padding:18px 20px;">
-              <div style="font-size:13px;color:var(--white40);line-height:1.65;margin-bottom:6px;">WebSupport je najväčší registrátor domén a poskytovateľ hostingu na Slovensku - od jednoduchých WooCommerce riešení až po vysokoobrátkové platformy.</div>
-              <div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(212,165,90,0.5);letter-spacing:0.08em;text-transform:uppercase;">Zdroj: WebSupport · 2024</div>
-            </div>
-      </div>
-    <div class="quote-full">
-      <div class="quote-full-mark">"</div>
-      <div class="quote-text">E-commerce na Slovensku rastie a s ním rastú aj nároky na <em>hosting infraštruktúru</em>. Vidíme, že e-shopy dnes potrebujú nielen stabilný hosting, ale aj rýchlosť, bezpečnosť a škálovateľnosť. Slovenský trh je v tomto ohľade čoraz vyspelejší - podnikatelia si uvedomujú, že <em>technická spoľahlivosť je priamo spojená s dôverou zákazníka</em>.</div>
-      <div class="quote-author">
-        <div class="quote-avatar" style="background:rgba(212,165,90,0.15);color:#d4a55a;">[ ]</div>
-        <div>
-          <div class="quote-name">[ Meno · WebSupport ]</div>
-          <div class="quote-role">Pozícia · WebSupport Slovakia</div>
+      <div style="display:grid;grid-template-columns:1fr 1.6fr 1.8fr;gap:16px;align-items:stretch;">
+
+        <!-- 1/3 stat -->
+        <div style="background:rgba(212,165,90,0.07);border:1px solid rgba(212,165,90,0.18);border-radius:12px;padding:28px 24px;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-family:'Sora',sans-serif;font-size:60px;font-weight:800;color:var(--lime);letter-spacing:-3px;line-height:1;margin-bottom:12px;">1/3</div>
+          <div style="font-size:14px;color:var(--white70);line-height:1.6;">slovenských e-shopov beží na infraštruktúre WebSupportu</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:rgba(212,165,90,0.45);letter-spacing:0.08em;text-transform:uppercase;margin-top:12px;">Zdroj: WebSupport · 2024</div>
         </div>
-        <div class="quote-tag">Hosting & Infraštruktúra</div>
+
+        <!-- popis -->
+        <div style="background:rgba(240,220,180,0.04);border:1px solid rgba(240,210,160,0.10);border-radius:12px;padding:28px 24px;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:600;color:var(--white);margin-bottom:12px;">Najväčší registrátor domén na Slovensku</div>
+          <div style="font-size:13px;color:var(--white40);line-height:1.7;">WebSupport je najväčší registrátor domén a poskytovateľ hostingu na Slovensku - od jednoduchých WooCommerce riešení až po vysokoobrátkové platformy.</div>
+        </div>
+
+        <!-- citát -->
+        <div style="background:rgba(240,220,180,0.03);border:1px solid rgba(240,210,160,0.08);border-left:2px solid rgba(212,165,90,0.4);border-radius:12px;padding:28px 24px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="font-size:13px;font-style:italic;color:rgba(240,232,216,0.75);line-height:1.75;margin-bottom:20px;">E-commerce na Slovensku rastie a s ním rastú aj nároky na <span style="color:#d4a55a;font-style:normal;font-weight:600;">hosting infraštruktúru</span>. Podnikatelia si uvedomujú, že <span style="color:#d4a55a;font-style:normal;font-weight:600;">technická spoľahlivosť je priamo spojená s dôverou zákazníka</span>.</div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:rgba(212,165,90,0.15);border:1px solid rgba(212,165,90,0.3);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:10px;color:#d4a55a;flex-shrink:0;">[ ]</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--white);">[ Meno · WebSupport ]</div>
+              <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--white40);letter-spacing:0.04em;">Pozícia · WebSupport Slovakia</div>
+            </div>
+            <div style="margin-left:auto;font-family:'DM Mono',monospace;font-size:9px;color:rgba(212,165,90,0.6);letter-spacing:0.06em;text-transform:uppercase;background:rgba(212,165,90,0.08);padding:4px 10px;border-radius:20px;">Hosting & Infraštruktúra</div>
+          </div>
+        </div>
+
       </div>
-    </div>
     </div>
   </div>
 </section>
@@ -2159,7 +2166,7 @@ footer {
 <!-- FOOTER -->
 
 
-<section id="newsletter" style="padding:80px 60px;background:rgba(240,220,180,0.03);border-top:1px solid rgba(240,210,160,0.10);">
+<section id="newsletter" style="padding:80px max(60px, calc((100% - 1200px) / 2));background:rgba(240,220,180,0.03);border-top:1px solid rgba(240,210,160,0.10);">
   <div style="max-width:640px;margin:0 auto;text-align:center;">
     <div class="section-tag" style="justify-content:center;margin-bottom:16px;">Zostaňte informovaní</div>
     <h2 style="font-size:clamp(28px,3.5vw,44px);letter-spacing:-1px;margin-bottom:16px;">Dostávajte <span>nové dáta</span> ako prví</h2>
