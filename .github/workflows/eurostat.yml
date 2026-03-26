@@ -1,0 +1,54 @@
+name: Eurostat Data Update
+
+on:
+  schedule:
+    # Každý pondelok o 7:00 CET (06:00 UTC)
+    - cron: '0 6 * * 1'
+  workflow_dispatch:  # Manuálne spustenie z GitHub UI
+
+jobs:
+  update-eurostat:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Fetch Eurostat data
+        run: python3 scripts/eurostat_updater.py
+        timeout-minutes: 5
+
+      - name: Check if data changed
+        id: check_changes
+        run: |
+          if git diff --quiet data/eurostat.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "Žiadne zmeny v dátach."
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Dáta sa zmenili — commitujeme."
+          fi
+
+      - name: Commit updated data
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --global user.name "Slovak E-commerce Bot"
+          git config --global user.email "bot@slovakecommerce.sk"
+          git add data/eurostat.json
+          git commit -m "auto: Eurostat data update $(date '+%Y-%m-%d')"
+          git push
+
+      - name: Trigger Vercel redeploy
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}" \
+            -H "Content-Type: application/json" \
+            --fail-with-body || echo "Deploy hook failed (optional)"
+        continue-on-error: true
