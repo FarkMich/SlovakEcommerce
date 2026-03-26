@@ -32,7 +32,7 @@ jobs:
       - name: Check if data changed
         id: check_changes
         run: |
-          if git diff --quiet data/eurostat.json; then
+          if git diff --quiet data/eurostat.json data/susr_retail.json; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "Žiadne zmeny v dátach."
           else
@@ -45,7 +45,7 @@ jobs:
         run: |
           git config --global user.name "Slovak E-commerce Bot"
           git config --global user.email "bot@slovakecommerce.sk"
-          git add data/eurostat.json
+          git add data/eurostat.json data/susr_retail.json
           git commit -m "auto: Eurostat data update $(date '+%Y-%m-%d')"
           git push
 
