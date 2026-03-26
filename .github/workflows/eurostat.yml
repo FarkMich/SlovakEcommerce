@@ -24,6 +24,10 @@ jobs:
       - name: Fetch Eurostat data
         run: python3 scripts/eurostat_updater.py
         timeout-minutes: 5
+        
+      - name: Fetch ŠÚ SR data
+        run: python3 scripts/susr_updater.py
+        timeout-minutes: 5
 
       - name: Check if data changed
         id: check_changes
