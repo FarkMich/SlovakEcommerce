@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "source": "BuiltWith.com / trends.builtwith.com/shop/country/Slovakia",
+    "url": "https://trends.builtwith.com/shop/country/Slovakia",
+    "updated": "2026-03-26T23:03:37Z",
+    "updated_display": "26. 3. 2026",
+    "source_type": "fallback"
+  },
+  "total_tracked": 22261,
+  "platforms": [
+    {
+      "name": "Shoptet",
+      "count": 7431,
+      "color": "#d4a55a",
+      "share_pct": 33.4,
+      "source": "fallback"
+    },
+    {
+      "name": "WooCommerce",
+      "count": 5481,
+      "color": "#7ec8a0",
+      "share_pct": 24.6,
+      "source": "fallback"
+    },
+    {
+      "name": "Shopify",
+      "count": 2423,
+      "color": "#96bf48",
+      "share_pct": 10.9,
+      "source": "fallback"
+    },
+    {
+      "name": "Wix",
+      "count": 2038,
+      "color": "#8e77b5",
+      "share_pct": 9.2,
+      "source": "fallback"
+    },
+    {
+      "name": "PrestaShop",
+      "count": 1970,
+      "color": "#df0067",
+      "share_pct": 8.8,
+      "source": "fallback"
+    },
+    {
+      "name": "OpenCart",
+      "count": 1196,
+      "color": "#44ade5",
+      "share_pct": 5.4,
+      "source": "fallback"
+    },
+    {
+      "name": "SmartWeb",
+      "count": 869,
+      "color": "#e07070",
+      "share_pct": 3.9,
+      "source": "fallback"
+    },
+    {
+      "name": "UpGates",
+      "count": 853,
+      "color": "#6b8f71",
+      "share_pct": 3.8,
+      "source": "fallback"
+    }
+  ]
+}
