@@ -1263,6 +1263,88 @@ footer {
   .quote-grid-wrap { grid-template-columns: 1fr; }
 }
 
+
+/* ─── EUROSTAT LIVE WIDGET ─── */
+.ec-live-section { margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--border); }
+.ec-live-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 24px;
+}
+.ec-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.ec-bar-label {
+  width: 110px;
+  font-size: 13px;
+  color: var(--white40);
+  font-family: 'DM Mono', monospace;
+  text-align: right;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+.ec-bar-label.sk-label {
+  color: var(--lime);
+  font-weight: 500;
+}
+.ec-bar-wrap {
+  flex: 1;
+  height: 32px;
+  background: var(--card);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--border);
+}
+.ec-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  width: 0%;
+  transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ec-bar-fill-val {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(24,18,10,0.85);
+  font-family: 'DM Mono', monospace;
+  white-space: nowrap;
+}
+.ec-avg-marker {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(240,232,216,0.25);
+  z-index: 2;
+}
+.ec-avg-marker::after {
+  content: attr(data-label);
+  position: absolute;
+  top: -20px;
+  left: 4px;
+  font-size: 10px;
+  color: var(--white40);
+  font-family: 'DM Mono', monospace;
+  white-space: nowrap;
+}
+.ec-live-source {
+  font-size: 11px;
+  color: var(--white20);
+  font-family: 'DM Mono', monospace;
+  margin-top: 16px;
+  letter-spacing: 0.04em;
+}
+.ec-eu-row { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
 </style>
 
   <!-- ═══ SEO META TAGS ═══ -->
@@ -1353,7 +1435,7 @@ footer {
     <li><a href="#doprava">Doprava &amp; platby</a></li>
     <li><a href="#eurostat">Slovensko vs EÚ</a></li>
   </ul>
-  <a href="mailto:pr@slovakecommerce.sk" class="nav-cta">Spolupráca →</a>
+  <a href="/cdn-cgi/l/email-protection#07777547746b6871666c6264686a6a6275646229746c" class="nav-cta">Spolupráca →</a>
 </nav>
 
 <!-- HERO -->
@@ -2161,6 +2243,15 @@ footer {
       </div>
     </div>
   </div>
+
+  <!-- EUROSTAT LIVE WIDGET — auto-aktualizované z Eurostat API -->
+  <div class="ec-live-section">
+    <div class="ec-live-title">Online nakupujúci · % používateľov internetu · <span id="ec-year">2024</span></div>
+    <div id="eu-comparison-widget"></div>
+    <div class="ec-live-source" id="ec-source">Zdroj: Eurostat (isoc_ec_ibuy) · Aktualizované automaticky každý týždeň</div>
+  </div>
+  <!-- / EUROSTAT LIVE WIDGET -->
+
 </section>
 
 <!-- FOOTER -->
@@ -2196,8 +2287,8 @@ footer {
         Komplexný prehľad slovenského e-commerce trhu. Zbierame, analyzujeme a prezentujeme dáta, ktoré pomáhajú e-shopárom, médiám a investorom pochopiť digitálnu obchod na Slovensku.
       </p>
       <div class="footer-cta-block">
-        <a href="mailto:pr@slovakecommerce.sk" class="footer-cta">Spolupráca a médiá →</a>
-        <a href="mailto:pr@slovakecommerce.sk" class="footer-cta outline">pr@slovakecommerce.sk</a>
+        <a href="/cdn-cgi/l/email-protection#d8a8aa98abb4b7aeb9b3bdbbb7b5b5bdaabbbdf6abb3" class="footer-cta">Spolupráca a médiá →</a>
+        <a href="/cdn-cgi/l/email-protection#32424072415e5d44535957515d5f5f574051571c4159" class="footer-cta outline"><span class="__cf_email__" data-cfemail="a3d3d1e3d0cfccd5c2c8c6c0cccecec6d1c0c68dd0c8">[email&#160;protected]</span></a>
       </div>
     </div>
 
@@ -2213,7 +2304,7 @@ footer {
       <h4 style="margin-top:20px;">Projekt</h4>
       <ul class="footer-links">
         <li><a href="/onas" style="color:var(--blue);">O nás</a></li>
-        <li><a href="mailto:pr@slovakecommerce.sk">Spolupráca</a></li>
+        <li><a href="/cdn-cgi/l/email-protection#52222012213e3d24333937313d3f3f372031377c2139">Spolupráca</a></li>
       </ul>
     </div>
 
@@ -2226,7 +2317,134 @@ footer {
   </div>
 </footer>
 
+
 <script>
+/* ── Eurostat Live Widget ── */
+(function(){
+  var DATA = {
+    year: '2024',
+    source: 'Eurostat (isoc_ec_ibuy) · Aktualizované 1. 3. 2025',
+    countries: [
+      { code:'IE', label:'Írsko',     val:96, flag:'🇮🇪', sk:false },
+      { code:'NL', label:'Holandsko', val:94, flag:'🇳🇱', sk:false },
+      { code:'DK', label:'Dánsko',    val:91, flag:'🇩🇰', sk:false },
+      { code:'SK', label:'Slovensko', val:86, flag:'🇸🇰', sk:true  },
+      { code:'CZ', label:'Česko',     val:86, flag:'🇨🇿', sk:false },
+      { code:'DE', label:'Nemecko',   val:81, flag:'🇩🇪', sk:false },
+      { code:'AT', label:'Rakúsko',   val:80, flag:'🇦🇹', sk:false },
+      { code:'PL', label:'Poľsko',    val:74, flag:'🇵🇱', sk:false },
+      { code:'HU', label:'Maďarsko',  val:73, flag:'🇭🇺', sk:false }
+    ],
+    euAvg: 77
+  };
+
+  // Skús načítať live dáta (ak existuje data/eurostat.json v repo)
+  function tryLoadLive(cb) {
+    var r = new XMLHttpRequest();
+    r.open('GET', '/data/eurostat.json?t=' + Date.now(), true);
+    r.timeout = 3000;
+    r.onload = function() {
+      if (r.status === 200) {
+        try {
+          var d = JSON.parse(r.responseText);
+          var buyers = d.online_buyers || {};
+          var countries = [];
+          var order = ['IE','NL','DK','SK','CZ','DE','AT','PL','HU'];
+          var flags = {IE:'🇮🇪',NL:'🇳🇱',DK:'🇩🇰',SK:'🇸🇰',CZ:'🇨🇿',DE:'🇩🇪',AT:'🇦🇹',PL:'🇵🇱',HU:'🇭🇺'};
+          order.forEach(function(code) {
+            var c = buyers[code];
+            if (c && c.latest_value != null) {
+              countries.push({ code:code, label:c.label, val:c.latest_value, flag:flags[code]||'', sk:code==='SK' });
+            }
+          });
+          if (countries.length > 0) {
+            DATA.countries = countries;
+            DATA.year = (buyers.SK && buyers.SK.latest_year) || DATA.year;
+            DATA.euAvg = (buyers.EU27_2020 && buyers.EU27_2020.latest_value) || DATA.euAvg;
+            DATA.source = d.meta && d.meta.source ? d.meta.source + ' · Aktualizované ' + (d.meta.updated_display || '') : DATA.source;
+          }
+        } catch(e) {}
+      }
+      cb();
+    };
+    r.onerror = r.ontimeout = cb;
+    r.send();
+  }
+
+  function render() {
+    var container = document.getElementById('eu-comparison-widget');
+    var yearEl = document.getElementById('ec-year');
+    var sourceEl = document.getElementById('ec-source');
+    if (!container) return;
+
+    if (yearEl) yearEl.textContent = DATA.year;
+    if (sourceEl) sourceEl.textContent = DATA.source;
+
+    var maxVal = Math.max.apply(null, DATA.countries.map(function(c){return c.val;}));
+    maxVal = Math.max(maxVal, DATA.euAvg || 0);
+
+    var html = '';
+    DATA.countries.forEach(function(c) {
+      var pct = (c.val / maxVal * 100).toFixed(1);
+      var color = c.sk
+        ? 'linear-gradient(90deg, rgba(126,200,160,0.6), rgba(126,200,160,0.9))'
+        : 'linear-gradient(90deg, rgba(212,165,90,0.25), rgba(212,165,90,0.45))';
+      var avgPct = DATA.euAvg ? (DATA.euAvg / maxVal * 100).toFixed(1) : null;
+      html += '<div class="ec-bar-row">' +
+        '<div class="ec-bar-label' + (c.sk ? ' sk-label' : '') + '">' + c.flag + ' ' + c.label + '</div>' +
+        '<div class="ec-bar-wrap">' +
+          (avgPct ? '<div class="ec-avg-marker" style="left:' + avgPct + '%" data-label="EÚ ' + DATA.euAvg + '%"></div>' : '') +
+          '<div class="ec-bar-fill" style="width:0%;background:' + color + '" data-target="' + pct + '">' +
+            '<span class="ec-bar-fill-val">' + c.val + ' %</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    });
+
+    // EÚ priemer riadok
+    if (DATA.euAvg) {
+      var euPct = (DATA.euAvg / maxVal * 100).toFixed(1);
+      html += '<div class="ec-bar-row ec-eu-row">' +
+        '<div class="ec-bar-label" style="color:var(--white20)">🇪🇺 EÚ priemer</div>' +
+        '<div class="ec-bar-wrap">' +
+          '<div class="ec-bar-fill" style="width:0%;background:rgba(240,232,216,0.12)" data-target="' + euPct + '">' +
+            '<span class="ec-bar-fill-val" style="color:var(--white40)">' + DATA.euAvg + ' %</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    container.innerHTML = html;
+
+    // Animácia — spusti po krátkom oneskorení (scroll observer)
+    var bars = container.querySelectorAll('.ec-bar-fill');
+    var animated = false;
+    var obs = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting && !animated) {
+        animated = true;
+        bars.forEach(function(bar, i) {
+          setTimeout(function() {
+            bar.style.width = bar.getAttribute('data-target') + '%';
+          }, i * 60);
+        });
+      }
+    }, { threshold: 0.2 });
+    obs.observe(container);
+  }
+
+  // Spusti po načítaní DOM
+  function init() {
+    tryLoadLive(render);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Animate bars on scroll
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -2256,17 +2474,4 @@ const countUpObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.hero-stat, .card, .vyzva-card, .trend-item').forEach(el => {
   el.style.opacity = '0';
   el.style.transform = 'translateY(20px)';
-  el.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
-  countUpObserver.observe(el);
-});
-
-// Stagger children within grids
-document.querySelectorAll('.card-grid, .vyzvy-grid, .hero-stats').forEach(grid => {
-  const children = grid.children;
-  Array.from(children).forEach((child, i) => {
-    child.style.transitionDelay = `${i * 0.07}s`;
-  });
-});
-</script>
-</body>
-</html>
+  el.style.transition = 'opacity 0.6s cubic-bezier(0.16,
