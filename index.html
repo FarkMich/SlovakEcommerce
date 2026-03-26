@@ -1640,6 +1640,10 @@ footer {
       </div>
     </div>
   </div>
+
+  <!-- ŠÚ SR Retail Index Widget -->
+  <div id="susr-retail-widget"></div>
+
 </section>
 
 <!-- PLATFORMY -->
@@ -2179,39 +2183,7 @@ footer {
       </div>
     </div>
 
-  <div class="eurostat-compare" style="margin-bottom:40px;">
-    <div class="ec-item">
-      <div class="ec-flag">🇮🇪</div>
-      <div class="ec-pct">96%</div>
-      <div class="ec-country">Írsko · 1. miesto EÚ</div>
-    </div>
-    <div class="ec-item">
-      <div class="ec-flag">🇳🇱</div>
-      <div class="ec-pct">94%</div>
-      <div class="ec-country">Holandsko · 2. miesto</div>
-    </div>
-    <div class="ec-item">
-      <div class="ec-flag">🇩🇰</div>
-      <div class="ec-pct">91%</div>
-      <div class="ec-country">Dánsko · 3. miesto</div>
-    </div>
-    <div class="ec-item highlight-item">
-      <div class="ec-flag">🇸🇰</div>
-      <div class="ec-pct" style="color:var(--lime)">86%</div>
-      <div class="ec-country">Slovensko</div>
-      <div class="ec-note">▲ #1 v CEE (spolu s CZ)</div>
-    </div>
-    <div class="ec-item">
-      <div class="ec-flag">🇨🇿</div>
-      <div class="ec-pct" style="color:var(--white70)">86%</div>
-      <div class="ec-country">Česko</div>
-    </div>
-    <div class="ec-item">
-      <div class="ec-flag">🇪🇺</div>
-      <div class="ec-pct" style="color:var(--white40);font-size:28px;">77%</div>
-      <div class="ec-country">Priemer EÚ (2024)</div>
-    </div>
-  </div>
+  
 
   <div class="two-col">
     <div>
@@ -2443,6 +2415,265 @@ footer {
     init();
   }
 })();
+</script>
+
+<script>
+/**
+ * Slovak E-commerce — ŠÚ SR Maloobchodný index widget
+ * Vkladaj inline do index.html (tesne pred zatvarajuci script tag)
+ *
+ * Požiadavky v HTML (pridaj do sekcie #trh, za hero stats):
+ *
+ *   <div id="susr-retail-widget"></div>
+ */
+
+/* ── ŠÚ SR Retail Index Widget ── */
+(function () {
+  'use strict';
+
+  var DATA_URL = '/data/susr_retail.json';
+
+  var MONTH_NAMES = {
+    '1.': 'január', '2.': 'február', '3.': 'marec', '4.': 'apríl',
+    '5.': 'máj', '6.': 'jún', '7.': 'júl', '8.': 'august',
+    '9.': 'september', '10.': 'október', '11.': 'november', '12.': 'december'
+  };
+
+  /* ── Statický fallback (verifikované dáta ŠÚ SR, december 2025) ── */
+  var FALLBACK = {
+    latest: { year: '2025', month: '12.', month_label: 'decembri', month_short: 'dec', index: 118.5, yoy_pct: -5.0, prev_year_index: 124.7 },
+    annual_avg: { '2021': 99.8, '2022': 104.7, '2023': 98.9, '2024': 103.4, '2025': 102.2 },
+    yoy: {
+      '2025': { '1.': 0.9, '2.': -2.6, '3.': -2.5, '4.': -0.4, '5.': -1.7, '6.': -0.3, '7.': 0.4, '8.': -0.7, '9.': 1.4, '10.': 0.7, '11.': -3.2, '12.': -5.0 }
+    },
+    chart_series: [
+      {label:'jan 2024',index:91.9,yoy:1.9},{label:'feb 2024',index:93.7,yoy:5.3},
+      {label:'mar 2024',index:102.4,yoy:0.5},{label:'apr 2024',index:101.4,yoy:9.6},
+      {label:'máj 2024',index:103.8,yoy:5.2},{label:'jún 2024',index:102.8,yoy:1.1},
+      {label:'júl 2024',index:102.6,yoy:5.9},{label:'aug 2024',index:100.8,yoy:0.7},
+      {label:'sep 2024',index:100.6,yoy:4.4},{label:'okt 2024',index:107.6,yoy:4.9},
+      {label:'nov 2024',index:108.9,yoy:5.0},{label:'dec 2024',index:124.7,yoy:10.1},
+      {label:'jan 2025',index:92.7,yoy:0.9},{label:'feb 2025',index:91.3,yoy:-2.6},
+      {label:'mar 2025',index:99.8,yoy:-2.5},{label:'apr 2025',index:101.0,yoy:-0.4},
+      {label:'máj 2025',index:102.0,yoy:-1.7},{label:'jún 2025',index:102.5,yoy:-0.3},
+      {label:'júl 2025',index:103.0,yoy:0.4},{label:'aug 2025',index:100.1,yoy:-0.7},
+      {label:'sep 2025',index:102.0,yoy:1.4},{label:'okt 2025',index:108.3,yoy:0.7},
+      {label:'nov 2025',index:105.4,yoy:-3.2},{label:'dec 2025',index:118.5,yoy:-5.0}
+    ],
+    meta: { source: 'Štatistický úrad SR (ob1801ms)', updated_display: '5. 3. 2026' }
+  };
+
+  function loadData(cb) {
+    var r = new XMLHttpRequest();
+    r.open('GET', DATA_URL + '?t=' + Date.now(), true);
+    r.timeout = 3000;
+    r.onload = function () {
+      if (r.status === 200) {
+        try { return cb(JSON.parse(r.responseText)); } catch (e) {}
+      }
+      cb(FALLBACK);
+    };
+    r.onerror = r.ontimeout = function () { cb(FALLBACK); };
+    r.send();
+  }
+
+  function yoyColor(val) {
+    if (val === null || val === undefined) return 'var(--white40)';
+    return val >= 0 ? 'var(--lime)' : '#e07070';
+  }
+
+  function yoyArrow(val) {
+    if (val === null || val === undefined) return '';
+    return val >= 0 ? '▲' : '▼';
+  }
+
+  function fmt(val, decimals) {
+    if (val === null || val === undefined) return 'N/A';
+    return Number(val).toFixed(decimals !== undefined ? decimals : 1);
+  }
+
+  function injectStyles() {
+    if (document.getElementById('susr-widget-styles')) return;
+    var s = document.createElement('style');
+    s.id = 'susr-widget-styles';
+    s.textContent = [
+      '.susr-widget{margin-top:40px;padding-top:32px;border-top:1px solid var(--border)}',
+      '.susr-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}',
+      '.susr-title{font-family:"DM Mono",monospace;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}',
+      '.susr-source{font-size:11px;color:var(--white20);font-family:"DM Mono",monospace;letter-spacing:.03em}',
+      '.susr-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:28px}',
+      '.susr-kpi{background:var(--card);padding:20px 18px}',
+      '.susr-kpi-label{font-size:11px;color:var(--white40);font-family:"DM Mono",monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}',
+      '.susr-kpi-val{font-family:"Sora",sans-serif;font-size:28px;font-weight:800;letter-spacing:-1px;line-height:1;color:var(--blue)}',
+      '.susr-kpi-val.lime{color:var(--lime)}',
+      '.susr-kpi-sub{font-size:12px;color:var(--white40);margin-top:4px}',
+      '.susr-chart-wrap{position:relative;height:120px;margin-bottom:8px}',
+      '.susr-chart-svg{width:100%;height:100%}',
+      '.susr-chart-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--white20);font-family:"DM Mono",monospace;margin-bottom:20px}',
+      '.susr-insight{background:rgba(212,165,90,.06);border:1px solid rgba(212,165,90,.15);border-radius:10px;padding:16px 20px;font-size:13px;color:var(--white70);line-height:1.6}',
+      '.susr-insight strong{color:var(--blue)}',
+      '@media(max-width:600px){.susr-kpis{grid-template-columns:1fr 1fr}.susr-kpi:last-child{grid-column:span 2}}'
+    ].join('');
+    document.head.appendChild(s);
+  }
+
+  function buildChart(series, container) {
+    /* Jednoduchý SVG line chart — index hodnoty */
+    var w = container.offsetWidth || 600;
+    var h = 120;
+    var pad = { top: 10, right: 8, bottom: 10, left: 8 };
+    var innerW = w - pad.left - pad.right;
+    var innerH = h - pad.top - pad.bottom;
+
+    var vals = series.map(function (p) { return p.index; });
+    var yoys = series.map(function (p) { return p.yoy; });
+    var min = Math.min.apply(null, vals) - 3;
+    var max = Math.max.apply(null, vals) + 3;
+
+    function px(i) { return pad.left + (i / (series.length - 1)) * innerW; }
+    function py(v) { return pad.top + innerH - ((v - min) / (max - min)) * innerH; }
+
+    /* Build path */
+    var path = series.map(function (p, i) {
+      return (i === 0 ? 'M' : 'L') + px(i).toFixed(1) + ',' + py(p.index).toFixed(1);
+    }).join(' ');
+
+    /* Area fill path */
+    var area = path + ' L' + px(series.length - 1).toFixed(1) + ',' + (pad.top + innerH) +
+      ' L' + pad.left + ',' + (pad.top + innerH) + ' Z';
+
+    /* YoY color dots */
+    var dots = series.map(function (p, i) {
+      if (p.yoy === null || p.yoy === undefined) return '';
+      var fill = p.yoy >= 0 ? '#7ec8a0' : '#e07070';
+      var r = Math.min(3.5, Math.abs(p.yoy) * 0.4 + 1.5);
+      return '<circle cx="' + px(i).toFixed(1) + '" cy="' + py(p.index).toFixed(1) +
+        '" r="' + r.toFixed(1) + '" fill="' + fill + '" opacity="0.85"/>';
+    }).join('');
+
+    /* Baseline 100 */
+    var base100 = py(100);
+    var baseLine = base100 >= pad.top && base100 <= pad.top + innerH
+      ? '<line x1="' + pad.left + '" y1="' + base100.toFixed(1) + '" x2="' + (w - pad.right) + '" y2="' + base100.toFixed(1) + '" stroke="rgba(240,232,216,.15)" stroke-width="1" stroke-dasharray="4,3"/>'
+      : '';
+
+    return '<svg class="susr-chart-svg" viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="#d4a55a" stop-opacity="0.3"/>' +
+      '<stop offset="100%" stop-color="#d4a55a" stop-opacity="0"/>' +
+      '</linearGradient></defs>' +
+      baseLine +
+      '<path d="' + area + '" fill="url(#rg)"/>' +
+      '<path d="' + path + '" fill="none" stroke="#d4a55a" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>' +
+      dots +
+      '</svg>';
+  }
+
+  function buildInsight(d) {
+    var l = d.latest;
+    var yoy = l.yoy_pct;
+    var yoyStr = yoy !== null ? (yoy >= 0 ? '+' : '') + fmt(yoy) + ' %' : '';
+    var context = '';
+
+    if (yoy !== null && yoy < 0) {
+      context = 'Maloobchod v ' + l.month_label + ' ' + l.year +
+        ' zaznamenal pokles oproti rovnakému mesiacu minulého roka. ' +
+        'E-commerce napriek tomu rastie rýchlejšie ako celkový retail — ' +
+        'digitálny kanál preberá podiel od kamenných predajní.';
+    } else if (yoy !== null && yoy >= 0) {
+      context = 'Maloobchod v ' + l.month_label + ' ' + l.year +
+        ' rastie medziročne. E-commerce zvyčajne rastie 1,5–2× rýchlejšie ' +
+        'ako celkový retail — potvrdzuje pokračujúci posun k online nákupom.';
+    }
+
+    return '<div class="susr-insight">' +
+      'Index maloobchodných tržieb (' + l.month_short + ' ' + l.year + '): ' +
+      '<strong>' + fmt(l.index) + '</strong> (základ 2021=100)' +
+      (yoyStr ? ', medziročne <strong style="color:' + yoyColor(yoy) + '">' + yoyArrow(yoy) + ' ' + yoyStr + '</strong>' : '') +
+      '. ' + context +
+      '</div>';
+  }
+
+  function render(d, container) {
+    var l = d.latest;
+    var series = d.chart_series || [];
+    var annualAvg = d.annual_avg || {};
+    var source = (d.meta && d.meta.source) ? d.meta.source : 'Štatistický úrad SR';
+    var updated = (d.meta && d.meta.updated_display) ? d.meta.updated_display : '';
+
+    var avgCurrent = annualAvg[l.year];
+    var avgPrev = annualAvg[String(Number(l.year) - 1)];
+    var avgChange = (avgCurrent && avgPrev) ? ((avgCurrent / avgPrev - 1) * 100) : null;
+
+    container.innerHTML = [
+      '<div class="susr-widget">',
+        '<div class="susr-header">',
+          '<div class="susr-title">Index maloobchodných tržieb · ŠÚ SR</div>',
+          '<div class="susr-source">' + source + ' · ' + updated + '</div>',
+        '</div>',
+
+        '<div class="susr-kpis">',
+          /* KPI 1 — posledný mesiac */
+          '<div class="susr-kpi">',
+            '<div class="susr-kpi-label">Index · ' + l.month_short + ' ' + l.year + '</div>',
+            '<div class="susr-kpi-val">' + fmt(l.index) + '</div>',
+            '<div class="susr-kpi-sub">základ 2021 = 100</div>',
+          '</div>',
+          /* KPI 2 — medziročná zmena */
+          '<div class="susr-kpi">',
+            '<div class="susr-kpi-label">Medziročne</div>',
+            '<div class="susr-kpi-val' + (l.yoy_pct !== null && l.yoy_pct >= 0 ? ' lime' : '') + '" style="color:' + yoyColor(l.yoy_pct) + '">',
+              l.yoy_pct !== null ? yoyArrow(l.yoy_pct) + ' ' + fmt(Math.abs(l.yoy_pct)) + ' %' : 'N/A',
+            '</div>',
+            '<div class="susr-kpi-sub">vs. ' + l.month_short + ' ' + (Number(l.year) - 1) + ' (' + fmt(l.prev_year_index) + ')</div>',
+          '</div>',
+          /* KPI 3 — ročný priemer */
+          '<div class="susr-kpi">',
+            '<div class="susr-kpi-label">Priemer ' + l.year + '</div>',
+            '<div class="susr-kpi-val">' + (avgCurrent ? fmt(avgCurrent) : 'N/A') + '</div>',
+            '<div class="susr-kpi-sub">' + (avgChange !== null ? (avgChange >= 0 ? '▲' : '▼') + ' ' + fmt(Math.abs(avgChange)) + ' % vs. ' + (Number(l.year) - 1) : '') + '</div>',
+          '</div>',
+        '</div>',
+
+        /* Chart */
+        series.length > 1 ? [
+          '<div class="susr-chart-wrap" id="susr-chart-container">',
+            buildChart(series, { offsetWidth: 600 }),
+          '</div>',
+          '<div class="susr-chart-labels">',
+            '<span>' + (series[0] && series[0].label) + '</span>',
+            '<span>' + (series[Math.floor(series.length / 2)] && series[Math.floor(series.length / 2)].label) + '</span>',
+            '<span>' + (series[series.length - 1] && series[series.length - 1].label) + '</span>',
+          '</div>',
+        ].join('') : '',
+
+        /* Insight */
+        buildInsight(d),
+      '</div>'
+    ].join('');
+
+    /* Re-render chart with actual width */
+    var chartWrap = document.getElementById('susr-chart-container');
+    if (chartWrap && series.length > 1) {
+      chartWrap.innerHTML = buildChart(series, chartWrap);
+    }
+  }
+
+  function init() {
+    var el = document.getElementById('susr-retail-widget');
+    if (!el) return;
+    injectStyles();
+    el.innerHTML = '<div style="font-size:12px;color:var(--white20);font-family:\'DM Mono\',monospace;padding:20px 0">Načítavam dáta ŠÚ SR...</div>';
+    loadData(function (d) { render(d, el); });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
 </script>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Animate bars on scroll
