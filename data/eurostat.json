@@ -1,1 +1,99 @@
-python3 scripts/eurostat_updater.py --static
+{
+  "meta": {
+    "updated": "2026-03-30T07:23:53Z",
+    "updated_display": "30. 3. 2026",
+    "source": "Eurostat (isoc_ec_ibuy)",
+    "note": "% používateľov internetu, ktorí nakupovali online v posledných 12 mesiacoch"
+  },
+  "online_buyers": {
+    "SK": {
+      "label": "Slovensko",
+      "latest_year": "2019",
+      "latest_value": 46.8,
+      "history": {
+        "2019": 46.8
+      },
+      "eu_rank_in_dataset": 6
+    },
+    "CZ": {
+      "label": "Česko",
+      "latest_year": "2019",
+      "latest_value": 42.6,
+      "history": {
+        "2019": 42.6
+      },
+      "eu_rank_in_dataset": 7
+    },
+    "PL": {
+      "label": "Poľsko",
+      "latest_year": "2019",
+      "latest_value": 41.4,
+      "history": {
+        "2019": 41.4
+      },
+      "eu_rank_in_dataset": 8
+    },
+    "HU": {
+      "label": "Maďarsko",
+      "latest_year": "2019",
+      "latest_value": 35.0,
+      "history": {
+        "2019": 35.0
+      },
+      "eu_rank_in_dataset": 9
+    },
+    "AT": {
+      "label": "Rakúsko",
+      "latest_year": "2019",
+      "latest_value": 54.4,
+      "history": {
+        "2019": 54.4
+      },
+      "eu_rank_in_dataset": 5
+    },
+    "DE": {
+      "label": "Nemecko",
+      "latest_year": "2019",
+      "latest_value": 71.0,
+      "history": {
+        "2019": 71.0
+      },
+      "eu_rank_in_dataset": 2
+    },
+    "EU27_2020": {
+      "label": "EÚ priemer",
+      "latest_year": "2019",
+      "latest_value": 49.0,
+      "history": {
+        "2019": 49.0
+      }
+    },
+    "IE": {
+      "label": "Írsko",
+      "latest_year": "2019",
+      "latest_value": 59.2,
+      "history": {
+        "2019": 59.2
+      },
+      "eu_rank_in_dataset": 4
+    },
+    "NL": {
+      "label": "Holandsko",
+      "latest_year": "2019",
+      "latest_value": 69.9,
+      "history": {
+        "2019": 69.9
+      },
+      "eu_rank_in_dataset": 3
+    },
+    "DK": {
+      "label": "Dánsko",
+      "latest_year": "2019",
+      "latest_value": 73.9,
+      "history": {
+        "2019": 73.9
+      },
+      "eu_rank_in_dataset": 1
+    }
+  }
+}
