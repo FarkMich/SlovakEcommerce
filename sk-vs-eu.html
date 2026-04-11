@@ -4,7 +4,22 @@
 
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SK vs EÚ | Slovenská e-commerce 2025</title>
-<meta name="description" content="Slovensko vs EÚ v e-commerce. Eurostat 2025 dáta - podiel online nakupujúcich, porovnanie krajín.">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Slovak e-commerce">
+<meta property="og:locale" content="sk_SK">
+<meta property="og:title" content="SK vs EÚ | Slovenský e-commerce 2026">
+<meta property="og:description" content="Ako si Slovensko stojí v online nákupoch v porovnaní s EÚ. Live dáta z Eurostat isoc_ec_ib20.">
+<meta property="og:url" content="https://slovakecommerce.sk/sk-vs-eu.html">
+<meta property="og:image" content="https://slovakecommerce.sk/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Slovenský e-commerce 2026 – cover s kľúčovými štatistikami">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SK vs EÚ | Slovenský e-commerce 2026">
+<meta name="twitter:description" content="Ako si Slovensko stojí v online nákupoch v porovnaní s EÚ. Live dáta z Eurostat isoc_ec_ib20.">
+<meta name="twitter:image" content="https://slovakecommerce.sk/og-cover.png">
+<meta name="description" content="Ako si Slovensko stojí v online nákupoch v porovnaní s EÚ. Live dáta z Eurostat isoc_ec_ib20.">
 <script defer data-domain="slovakecommerce.sk" src="https://plausible.io/js/script.outbound-links.tagged-events.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="preload" href="/fonts/sora-800-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -12,7 +27,6 @@
 </head>
 <body data-page="sk-vs-eu">
 <nav><a href="/index.html" class="logo"><svg width="32" height="32" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 2L32 10V26L18 34L4 26V10L18 2Z" fill="rgba(212,165,90,0.10)" stroke="#d4a55a" stroke-width="1.2"/><polyline points="8,25 12,18 17,21 22,13 28,17" fill="none" stroke="#7ec8a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="18" r="1.6" fill="#7ec8a0"/><circle cx="22" cy="13" r="1.6" fill="#d4a55a"/></svg><div class="logo-text">Slovak<span>e-commerce</span></div></a><ul class="nav-links"><li><a href="/trh.html">Trh</a></li><li><a href="/platformy.html">Platformy</a></li><li><a href="/eshopari.html">E-shopári</a></li><li><a href="/doprava.html">Doprava & platby</a></li><li><a href="/sk-vs-eu.html">SK vs EÚ</a></li></ul><a href="mailto:pr@slovakecommerce.sk" class="nav-cta plausible-event-name=Email+Click">Spolupráca →</a></nav>
-
 
 <div class="page-header">
   <div class="page-header-glow ph-glow-1"></div>
@@ -141,118 +155,7 @@
   </div>
 </section>
 
-<script>
-/* Eurostat widget - isoc_ec_ib20, dáta 2025, zoradené zostupne */
-(function(){
-  /* Krajiny zoradené od najvyššieho po najnižšie */
-  var DATA = {
-    year: '2025',
-    source: 'Eurostat (isoc_ec_ib20) · Dáta za rok 2025, zverejnené február 2026',
-    countries: [
-      { code:'IE', label:'Írsko',     val:96, flag:'🇮🇪', sk:false },
-      { code:'NL', label:'Holandsko', val:94, flag:'🇳🇱', sk:false },
-      { code:'DK', label:'Dánsko',    val:91, flag:'🇩🇰', sk:false },
-      { code:'CZ', label:'Česko',     val:87, flag:'🇨🇿', sk:false },
-      { code:'SK', label:'Slovensko', val:85, flag:'🇸🇰', sk:true  },
-      { code:'DE', label:'Nemecko',   val:82, flag:'🇩🇪', sk:false },
-      { code:'AT', label:'Rakúsko',   val:80, flag:'🇦🇹', sk:false },
-      { code:'HU', label:'Maďarsko',  val:79, flag:'🇭🇺', sk:false },
-      { code:'PL', label:'Poľsko',    val:77, flag:'🇵🇱', sk:false }
-    ],
-    euAvg: 78
-  };
-
-  function tryLoadLive(cb) {
-    var r = new XMLHttpRequest();
-    r.open('GET', '/data/eurostat.json?t=' + Date.now(), true);
-    r.timeout = 3000;
-    r.onload = function() {
-      if (r.status === 200) {
-        try {
-          var d = JSON.parse(r.responseText);
-          var buyers = d.online_buyers || {};
-          var order = ['IE','NL','DK','CZ','SK','DE','AT','HU','PL'];
-          var flags = {IE:'🇮🇪',NL:'🇳🇱',DK:'🇩🇰',SK:'🇸🇰',CZ:'🇨🇿',DE:'🇩🇪',AT:'🇦🇹',PL:'🇵🇱',HU:'🇭🇺'};
-          var countries = order.map(function(code){
-            var c = buyers[code];
-            return c && c.latest_value != null ? { code:code, label:c.label, val:c.latest_value, flag:flags[code]||'', sk:code==='SK' } : null;
-          }).filter(Boolean);
-          if (countries.length > 0) {
-            /* Sort descending */
-            countries.sort(function(a,b){ return b.val - a.val; });
-            DATA.countries = countries;
-            DATA.year = (buyers.SK && buyers.SK.latest_year) || DATA.year;
-            DATA.euAvg = (buyers.EU27_2020 && buyers.EU27_2020.latest_value) || DATA.euAvg;
-          }
-        } catch(e) {}
-      }
-      cb();
-    };
-    r.onerror = r.ontimeout = cb;
-    r.send();
-  }
-
-  function render() {
-    var container = document.getElementById('eu-comparison-widget');
-    var yearEl = document.getElementById('ec-year');
-    var sourceEl = document.getElementById('ec-source');
-    if (!container) return;
-    if (yearEl) yearEl.textContent = DATA.year;
-    if (sourceEl) sourceEl.textContent = DATA.source;
-
-    var maxVal = Math.max.apply(null, DATA.countries.map(function(c){return c.val;}));
-    maxVal = Math.max(maxVal, DATA.euAvg || 0);
-
-    var html = '';
-    DATA.countries.forEach(function(c) {
-      var pct = (c.val / maxVal * 100).toFixed(1);
-      var color = c.sk
-        ? 'linear-gradient(90deg, rgba(126,200,160,0.55), rgba(126,200,160,0.85))'
-        : 'linear-gradient(90deg, rgba(212,165,90,0.22), rgba(212,165,90,0.42))';
-      var avgPct = DATA.euAvg ? (DATA.euAvg / maxVal * 100).toFixed(1) : null;
-      html += '<div class="ec-bar-row">' +
-        '<div class="ec-bar-label' + (c.sk ? ' sk-label' : '') + '">' + c.flag + ' ' + c.label + '</div>' +
-        '<div class="ec-bar-wrap">' +
-          (avgPct ? '<div class="ec-avg-marker" style="left:' + avgPct + '%" data-label="EÚ ' + DATA.euAvg + '%"></div>' : '') +
-          '<div class="ec-bar-fill" style="background:' + color + '" data-target="' + pct + '">' +
-            '<span class="ec-bar-fill-val">' + c.val + ' %</span>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
-    });
-
-    if (DATA.euAvg) {
-      var euPct = (DATA.euAvg / maxVal * 100).toFixed(1);
-      html += '<div class="ec-bar-row ec-eu-row">' +
-        '<div class="ec-bar-label" style="color:var(--white20)">🇪🇺 EÚ priemer</div>' +
-        '<div class="ec-bar-wrap">' +
-          '<div class="ec-bar-fill" style="background:rgba(240,232,216,0.12)" data-target="' + euPct + '">' +
-            '<span class="ec-bar-fill-val" style="color:var(--white40)">' + DATA.euAvg + ' %</span>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
-    }
-
-    container.innerHTML = html;
-    /* Animate */
-    var bars = container.querySelectorAll('.ec-bar-fill');
-    var done = false;
-    var obs = new IntersectionObserver(function(entries){
-      if (entries[0].isIntersecting && !done) {
-        done = true;
-        bars.forEach(function(b,i){ setTimeout(function(){ b.style.width = b.getAttribute('data-target') + '%'; }, i*70); });
-      }
-    }, {threshold:0.2});
-    obs.observe(container);
-  }
-
-  function init(){ tryLoadLive(render); }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-})();
-</script>
-
-
+<script defer src="/js/eurostat-widget.js"></script>
 
 <footer><div class="footer-top"><div><a href="/index.html" class="logo" style="margin-bottom:14px;display:inline-flex;"><svg width="32" height="32" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 2L32 10V26L18 34L4 26V10L18 2Z" fill="rgba(212,165,90,0.10)" stroke="#d4a55a" stroke-width="1.2"/><polyline points="8,25 12,18 17,21 22,13 28,17" fill="none" stroke="#7ec8a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="18" r="1.6" fill="#7ec8a0"/><circle cx="22" cy="13" r="1.6" fill="#d4a55a"/></svg><span class="logo-text" style="font-size:17px;margin-left:12px;">Slovak<span>e-commerce</span></span></a><p class="footer-desc">Komplexný prehľad slovenského e-commerce trhu. Dáta pre e-shopárov, médiá a investorov.</p><a href="mailto:pr@slovakecommerce.sk" class="footer-cta plausible-event-name=Email+Click">Spolupráca a médiá →</a><a href="mailto:michal@slovakecommerce.sk" class="footer-cta outline plausible-event-name=Email+Click" style="margin-top:6px;">michal@slovakecommerce.sk</a></div><div class="footer-col"><h4>Sekcie</h4><ul class="footer-links"><li><a href="/trh.html">Trh</a></li><li><a href="/platformy.html">Platformy</a></li><li><a href="/eshopari.html">E-shopári</a></li><li><a href="/doprava.html">Doprava & platby</a></li><li><a href="/sk-vs-eu.html">SK vs EÚ</a></li><li><a href="/onas/">O nás</a></li><li><a href="/mediakit/">Media kit</a></li><li><a href="/privacy.html">Ochrana súkromia</a></li></ul></div></div><div class="footer-bottom"><div class="footer-copy">© 2026 Slovak e-commerce · slovakecommerce.sk</div><div class="footer-copy">Dáta: Heureka Group, Shoptet, Levosphere, Packeta, Eurostat, ŠÚ SR</div></div></footer>
 <script defer src="/js/nav.js"></script>

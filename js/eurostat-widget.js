@@ -1,210 +1,123 @@
-/**
- * Slovak E-commerce — Eurostat Live Data Widget
- * Vkladaj do HTML pred </body>:
- *   <script src="/js/eurostat-widget.js"></script>
- *
- * Požiadavky v HTML:
- *   <div id="eu-comparison-widget"></div>
- *   <span class="eurostat-sk-value"></span>   ← auto-fill SK %
- *   <span class="eurostat-eu-value"></span>   ← auto-fill EÚ %
- *   <span class="eurostat-updated"></span>    ← auto-fill dátum aktualizácie
- */
-
+/* Eurostat widget — isoc_ec_ib20 porovnanie SK vs EÚ krajiny.
+   Požiadavky v HTML:
+     <div id="eu-comparison-widget"></div>
+     <span id="ec-year"></span>     (optional)
+     <span id="ec-source"></span>   (optional)
+   Live dáta pullujeme z /data/eurostat.json (updater beží cez GitHub Action /
+   scheduled task). Ak fetch zlyhá, padneme na fallback konštanty nižšie. */
 (function () {
   'use strict';
 
-  const DATA_URL = '/data/eurostat.json';
-
-  // Farby pre krajiny (espresso/gold paleta)
-  const COUNTRY_COLORS = {
-    SK: '#C9A84C', // gold – zvýraznená
-    CZ: '#6B8F71',
-    IE: '#2C1A0E',
-    NL: '#4A3728',
-    DK: '#7A6A5A',
-    DE: '#9A8A7A',
-    AT: '#B8A898',
-    PL: '#8A9A8A',
-    HU: '#9A8A9A',
+  var DATA = {
+    year: '2025',
+    source: 'Eurostat (isoc_ec_ib20) · Dáta za rok 2025, zverejnené február 2026',
+    countries: [
+      { code: 'IE', label: 'Írsko',     val: 96, flag: '🇮🇪', sk: false },
+      { code: 'NL', label: 'Holandsko', val: 94, flag: '🇳🇱', sk: false },
+      { code: 'DK', label: 'Dánsko',    val: 91, flag: '🇩🇰', sk: false },
+      { code: 'CZ', label: 'Česko',     val: 87, flag: '🇨🇿', sk: false },
+      { code: 'SK', label: 'Slovensko', val: 85, flag: '🇸🇰', sk: true  },
+      { code: 'DE', label: 'Nemecko',   val: 82, flag: '🇩🇪', sk: false },
+      { code: 'AT', label: 'Rakúsko',   val: 80, flag: '🇦🇹', sk: false },
+      { code: 'HU', label: 'Maďarsko',  val: 79, flag: '🇭🇺', sk: false },
+      { code: 'PL', label: 'Poľsko',    val: 77, flag: '🇵🇱', sk: false }
+    ],
+    euAvg: 78
   };
 
-  const EU_COLOR = '#CCCCCC';
-
-  async function loadData() {
-    try {
-      const res = await fetch(DATA_URL + '?t=' + Date.now());
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return await res.json();
-    } catch (e) {
-      console.warn('[Eurostat Widget] Nedá sa načítať data/eurostat.json:', e.message);
-      return null;
-    }
-  }
-
-  function fillInlineValues(data) {
-    if (!data) return;
-    const buyers = data.online_buyers || {};
-
-    // Naplní všetky <span class="eurostat-sk-value">
-    const skVal = buyers.SK?.latest_value;
-    document.querySelectorAll('.eurostat-sk-value').forEach(el => {
-      if (skVal != null) el.textContent = skVal + ' %';
-    });
-
-    // EÚ priemer
-    const euVal = buyers.EU27_2020?.latest_value;
-    document.querySelectorAll('.eurostat-eu-value').forEach(el => {
-      if (euVal != null) el.textContent = euVal + ' %';
-    });
-
-    // Dátum aktualizácie
-    const updated = data.meta?.updated_display;
-    document.querySelectorAll('.eurostat-updated').forEach(el => {
-      if (updated) el.textContent = 'Zdroj: Eurostat · Aktualizované ' + updated;
-    });
-  }
-
-  function buildComparisonChart(data, containerId) {
-    const container = document.getElementById(containerId);
-    if (!container || !data) return;
-
-    const buyers = data.online_buyers || {};
-
-    // Zoraď krajiny podľa hodnoty (zostupne), EÚ priemer daj na koniec
-    const countries = Object.entries(buyers)
-      .filter(([code]) => code !== 'EU27_2020')
-      .sort(([, a], [, b]) => (b.latest_value || 0) - (a.latest_value || 0));
-
-    const euAvg = buyers.EU27_2020?.latest_value;
-    const latestYear = data.online_buyers?.SK?.latest_year || '2024';
-
-    // CSS
-    const style = document.createElement('style');
-    style.textContent = `
-      .ec-chart { font-family: 'Sora', Arial, sans-serif; margin: 24px 0; }
-      .ec-chart-title { font-size: 13px; color: #888; margin-bottom: 16px; letter-spacing: 0.05em; text-transform: uppercase; }
-      .ec-bar-row { display: flex; align-items: center; margin-bottom: 10px; gap: 12px; }
-      .ec-bar-label { width: 100px; font-size: 13px; color: #2C1A0E; flex-shrink: 0; text-align: right; }
-      .ec-bar-label.sk { font-weight: 700; color: #C9A84C; }
-      .ec-bar-wrap { flex: 1; height: 28px; background: #F5F5F5; border-radius: 4px; overflow: hidden; position: relative; }
-      .ec-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s cubic-bezier(0.16,1,0.3,1); display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
-      .ec-bar-val { font-size: 13px; font-weight: 600; color: #fff; white-space: nowrap; }
-      .ec-bar-val.dark { color: #2C1A0E; }
-      .ec-avg-line { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(44,26,14,0.25); z-index: 2; }
-      .ec-avg-line::after { content: attr(data-label); position: absolute; top: -18px; left: 4px; font-size: 10px; color: #888; white-space: nowrap; }
-      .ec-source { font-size: 11px; color: #aaa; margin-top: 12px; }
-    `;
-    document.head.appendChild(style);
-
-    container.innerHTML = '';
-    const chart = document.createElement('div');
-    chart.className = 'ec-chart';
-
-    const title = document.createElement('div');
-    title.className = 'ec-chart-title';
-    title.textContent = `Online nakupujúci – ${latestYear} (% používateľov internetu)`;
-    chart.appendChild(title);
-
-    const maxVal = Math.max(...countries.map(([, d]) => d.latest_value || 0), euAvg || 0);
-
-    countries.forEach(([code, cdata]) => {
-      const val = cdata.latest_value;
-      if (val == null) return;
-
-      const isSK = code === 'SK';
-      const row = document.createElement('div');
-      row.className = 'ec-bar-row';
-
-      const lbl = document.createElement('div');
-      lbl.className = 'ec-bar-label' + (isSK ? ' sk' : '');
-      lbl.textContent = cdata.label;
-
-      const wrap = document.createElement('div');
-      wrap.className = 'ec-bar-wrap';
-
-      // EÚ priemer vertikálna čiara
-      if (euAvg) {
-        const line = document.createElement('div');
-        line.className = 'ec-avg-line';
-        line.style.left = (euAvg / maxVal * 100) + '%';
-        line.setAttribute('data-label', 'EÚ priemer ' + euAvg + '%');
-        wrap.appendChild(line);
+  function tryLoadLive(cb) {
+    var r = new XMLHttpRequest();
+    r.open('GET', '/data/eurostat.json?t=' + Date.now(), true);
+    r.timeout = 3000;
+    r.onload = function () {
+      if (r.status === 200) {
+        try {
+          var d = JSON.parse(r.responseText);
+          var buyers = d.online_buyers || {};
+          var order = ['IE', 'NL', 'DK', 'CZ', 'SK', 'DE', 'AT', 'HU', 'PL'];
+          var flags = { IE: '🇮🇪', NL: '🇳🇱', DK: '🇩🇰', SK: '🇸🇰', CZ: '🇨🇿', DE: '🇩🇪', AT: '🇦🇹', PL: '🇵🇱', HU: '🇭🇺' };
+          var countries = order.map(function (code) {
+            var c = buyers[code];
+            return c && c.latest_value != null
+              ? { code: code, label: c.label, val: c.latest_value, flag: flags[code] || '', sk: code === 'SK' }
+              : null;
+          }).filter(Boolean);
+          if (countries.length > 0) {
+            countries.sort(function (a, b) { return b.val - a.val; });
+            DATA.countries = countries;
+            DATA.year = (buyers.SK && buyers.SK.latest_year) || DATA.year;
+            DATA.euAvg = (buyers.EU27_2020 && buyers.EU27_2020.latest_value) || DATA.euAvg;
+          }
+        } catch (e) { /* ignore malformed data */ }
       }
+      cb();
+    };
+    r.onerror = r.ontimeout = cb;
+    r.send();
+  }
 
-      const fill = document.createElement('div');
-      fill.className = 'ec-bar-fill';
-      fill.style.width = '0%';
-      fill.style.backgroundColor = isSK ? COUNTRY_COLORS.SK : (COUNTRY_COLORS[code] || '#ccc');
+  function render() {
+    var container = document.getElementById('eu-comparison-widget');
+    var yearEl = document.getElementById('ec-year');
+    var sourceEl = document.getElementById('ec-source');
+    if (!container) return;
+    if (yearEl) yearEl.textContent = DATA.year;
+    if (sourceEl) sourceEl.textContent = DATA.source;
 
-      const valEl = document.createElement('span');
-      valEl.className = 'ec-bar-val' + (val < 30 ? ' dark' : '');
-      valEl.textContent = val + ' %';
+    var maxVal = Math.max.apply(null, DATA.countries.map(function (c) { return c.val; }));
+    maxVal = Math.max(maxVal, DATA.euAvg || 0);
 
-      fill.appendChild(valEl);
-      wrap.appendChild(fill);
-
-      row.appendChild(lbl);
-      row.appendChild(wrap);
-      chart.appendChild(row);
-
-      // Animácia pri scroll
-      setTimeout(() => { fill.style.width = (val / maxVal * 100) + '%'; }, 100);
+    var html = '';
+    DATA.countries.forEach(function (c) {
+      var pct = (c.val / maxVal * 100).toFixed(1);
+      var color = c.sk
+        ? 'linear-gradient(90deg, rgba(126,200,160,0.55), rgba(126,200,160,0.85))'
+        : 'linear-gradient(90deg, rgba(212,165,90,0.22), rgba(212,165,90,0.42))';
+      var avgPct = DATA.euAvg ? (DATA.euAvg / maxVal * 100).toFixed(1) : null;
+      html += '<div class="ec-bar-row">' +
+        '<div class="ec-bar-label' + (c.sk ? ' sk-label' : '') + '">' + c.flag + ' ' + c.label + '</div>' +
+        '<div class="ec-bar-wrap">' +
+          (avgPct ? '<div class="ec-avg-marker" style="left:' + avgPct + '%" data-label="EÚ ' + DATA.euAvg + '%"></div>' : '') +
+          '<div class="ec-bar-fill" style="background:' + color + '" data-target="' + pct + '">' +
+            '<span class="ec-bar-fill-val">' + c.val + ' %</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
     });
 
-    // EÚ priemer row
-    if (euAvg) {
-      const avgRow = document.createElement('div');
-      avgRow.className = 'ec-bar-row';
-      avgRow.style.marginTop = '8px';
-      avgRow.style.borderTop = '1px solid #eee';
-      avgRow.style.paddingTop = '8px';
-
-      const avgLbl = document.createElement('div');
-      avgLbl.className = 'ec-bar-label';
-      avgLbl.style.color = '#888';
-      avgLbl.textContent = 'EÚ priemer';
-
-      const avgWrap = document.createElement('div');
-      avgWrap.className = 'ec-bar-wrap';
-
-      const avgFill = document.createElement('div');
-      avgFill.className = 'ec-bar-fill';
-      avgFill.style.width = '0%';
-      avgFill.style.backgroundColor = EU_COLOR;
-
-      const avgVal = document.createElement('span');
-      avgVal.className = 'ec-bar-val dark';
-      avgVal.textContent = euAvg + ' %';
-
-      avgFill.appendChild(avgVal);
-      avgWrap.appendChild(avgFill);
-      avgRow.appendChild(avgLbl);
-      avgRow.appendChild(avgWrap);
-      chart.appendChild(avgRow);
-
-      setTimeout(() => { avgFill.style.width = (euAvg / maxVal * 100) + '%'; }, 200);
+    if (DATA.euAvg) {
+      var euPct = (DATA.euAvg / maxVal * 100).toFixed(1);
+      html += '<div class="ec-bar-row ec-eu-row">' +
+        '<div class="ec-bar-label" style="color:var(--white20)">🇪🇺 EÚ priemer</div>' +
+        '<div class="ec-bar-wrap">' +
+          '<div class="ec-bar-fill" style="background:rgba(240,232,216,0.12)" data-target="' + euPct + '">' +
+            '<span class="ec-bar-fill-val" style="color:var(--white40)">' + DATA.euAvg + ' %</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
     }
 
-    const source = document.createElement('div');
-    source.className = 'ec-source';
-    source.textContent = data.meta?.source + ' · Aktualizované ' + (data.meta?.updated_display || '');
-    chart.appendChild(source);
+    container.innerHTML = html;
 
-    container.appendChild(chart);
+    /* Animate bar fills on scroll-in */
+    var bars = container.querySelectorAll('.ec-bar-fill');
+    var done = false;
+    var obs = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting && !done) {
+        done = true;
+        bars.forEach(function (b, i) {
+          setTimeout(function () { b.style.width = b.getAttribute('data-target') + '%'; }, i * 70);
+        });
+      }
+    }, { threshold: 0.2 });
+    obs.observe(container);
   }
 
-  // Spustenie po načítaní DOM
-  function init() {
-    loadData().then(data => {
-      fillInlineValues(data);
-      buildComparisonChart(data, 'eu-comparison-widget');
-    });
-  }
+  function init() { tryLoadLive(render); }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
-
 })();
