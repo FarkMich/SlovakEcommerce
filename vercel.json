@@ -70,15 +70,44 @@
       "permanent": true
     },
     {
-      "source": "/onas.html",
-      "destination": "/onas/",
-      "permanent": true
-    }
-  ],
-  "rewrites": [
+      "source": "/trh",
+      "destination": "/",
+      "statusCode": 302
+    },
     {
-      "source": "/((?!maintenance\\.html|css/|fonts/|favicon\\.ico|robots\\.txt).*)",
-      "destination": "/maintenance.html"
+      "source": "/platformy",
+      "destination": "/",
+      "statusCode": 302
+    },
+    {
+      "source": "/eshopari",
+      "destination": "/",
+      "statusCode": 302
+    },
+    {
+      "source": "/doprava",
+      "destination": "/",
+      "statusCode": 302
+    },
+    {
+      "source": "/sk-vs-eu",
+      "destination": "/",
+      "statusCode": 302
+    },
+    {
+      "source": "/privacy",
+      "destination": "/",
+      "statusCode": 302
+    },
+    {
+      "source": "/onas/:path*",
+      "destination": "/",
+      "statusCode": 302
+    },
+    {
+      "source": "/media-kit/:path*",
+      "destination": "/",
+      "statusCode": 302
     }
   ]
 }
