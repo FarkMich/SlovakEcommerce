@@ -77,16 +77,8 @@
   ],
   "rewrites": [
     {
-      "source": "/onas",
-      "destination": "/onas/index.html"
-    },
-    {
-      "source": "/media-kit",
-      "destination": "/mediakit/index.html"
-    },
-    {
-      "source": "/media-kit/",
-      "destination": "/mediakit/index.html"
+      "source": "/((?!maintenance\\.html|css/|fonts/|favicon\\.ico|robots\\.txt).*)",
+      "destination": "/maintenance.html"
     }
   ]
 }
