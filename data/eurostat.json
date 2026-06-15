@@ -1,139 +1,99 @@
 {
   "meta": {
-    "updated": "2025-03-01T00:00:00Z",
-    "updated_display": "1. 3. 2025",
-    "source": "Eurostat (isoc_ec_ibuy) — statické dáta, automatická aktualizácia každý pondelok",
+    "updated": "2026-06-15T11:57:48Z",
+    "updated_display": "15. 6. 2026",
+    "source": "Eurostat (isoc_ec_ibuy)",
     "note": "% používateľov internetu, ktorí nakupovali online v posledných 12 mesiacoch"
   },
   "online_buyers": {
     "SK": {
       "label": "Slovensko",
-      "latest_year": "2024",
-      "latest_value": 86.0,
-      "eu_rank_in_dataset": 1,
+      "latest_year": "2019",
+      "latest_value": 46.8,
       "history": {
-        "2020": 75.0,
-        "2021": 78.0,
-        "2022": 81.0,
-        "2023": 83.0,
-        "2024": 86.0
-      }
+        "2019": 46.8
+      },
+      "eu_rank_in_dataset": 6
     },
     "CZ": {
       "label": "Česko",
-      "latest_year": "2024",
-      "latest_value": 86.0,
-      "eu_rank_in_dataset": 1,
+      "latest_year": "2019",
+      "latest_value": 42.6,
       "history": {
-        "2020": 74.0,
-        "2021": 77.0,
-        "2022": 80.0,
-        "2023": 83.0,
-        "2024": 86.0
-      }
+        "2019": 42.6
+      },
+      "eu_rank_in_dataset": 7
     },
     "PL": {
       "label": "Poľsko",
-      "latest_year": "2024",
-      "latest_value": 74.0,
-      "eu_rank_in_dataset": 5,
+      "latest_year": "2019",
+      "latest_value": 41.4,
       "history": {
-        "2020": 60.0,
-        "2021": 65.0,
-        "2022": 69.0,
-        "2023": 71.0,
-        "2024": 74.0
-      }
+        "2019": 41.4
+      },
+      "eu_rank_in_dataset": 8
     },
     "HU": {
       "label": "Maďarsko",
-      "latest_year": "2024",
-      "latest_value": 73.0,
-      "eu_rank_in_dataset": 6,
+      "latest_year": "2019",
+      "latest_value": 35.0,
       "history": {
-        "2020": 59.0,
-        "2021": 63.0,
-        "2022": 68.0,
-        "2023": 70.0,
-        "2024": 73.0
-      }
+        "2019": 35.0
+      },
+      "eu_rank_in_dataset": 9
     },
     "AT": {
       "label": "Rakúsko",
-      "latest_year": "2024",
-      "latest_value": 80.0,
-      "eu_rank_in_dataset": 4,
+      "latest_year": "2019",
+      "latest_value": 54.4,
       "history": {
-        "2020": 68.0,
-        "2021": 72.0,
-        "2022": 76.0,
-        "2023": 78.0,
-        "2024": 80.0
-      }
+        "2019": 54.4
+      },
+      "eu_rank_in_dataset": 5
     },
     "DE": {
       "label": "Nemecko",
-      "latest_year": "2024",
-      "latest_value": 81.0,
-      "eu_rank_in_dataset": 3,
+      "latest_year": "2019",
+      "latest_value": 71.0,
       "history": {
-        "2020": 70.0,
-        "2021": 73.0,
-        "2022": 77.0,
-        "2023": 79.0,
-        "2024": 81.0
-      }
+        "2019": 71.0
+      },
+      "eu_rank_in_dataset": 2
     },
     "EU27_2020": {
       "label": "EÚ priemer",
-      "latest_year": "2024",
-      "latest_value": 77.0,
+      "latest_year": "2019",
+      "latest_value": 49.0,
       "history": {
-        "2020": 63.0,
-        "2021": 66.0,
-        "2022": 70.0,
-        "2023": 73.0,
-        "2024": 77.0
+        "2019": 49.0
       }
     },
     "IE": {
       "label": "Írsko",
-      "latest_year": "2024",
-      "latest_value": 96.0,
-      "eu_rank_in_dataset": 1,
+      "latest_year": "2019",
+      "latest_value": 59.2,
       "history": {
-        "2020": 82.0,
-        "2021": 86.0,
-        "2022": 90.0,
-        "2023": 93.0,
-        "2024": 96.0
-      }
+        "2019": 59.2
+      },
+      "eu_rank_in_dataset": 4
     },
     "NL": {
       "label": "Holandsko",
-      "latest_year": "2024",
-      "latest_value": 94.0,
-      "eu_rank_in_dataset": 2,
+      "latest_year": "2019",
+      "latest_value": 69.9,
       "history": {
-        "2020": 83.0,
-        "2021": 86.0,
-        "2022": 89.0,
-        "2023": 92.0,
-        "2024": 94.0
-      }
+        "2019": 69.9
+      },
+      "eu_rank_in_dataset": 3
     },
     "DK": {
       "label": "Dánsko",
-      "latest_year": "2024",
-      "latest_value": 91.0,
-      "eu_rank_in_dataset": 3,
+      "latest_year": "2019",
+      "latest_value": 73.9,
       "history": {
-        "2020": 80.0,
-        "2021": 83.0,
-        "2022": 86.0,
-        "2023": 89.0,
-        "2024": 91.0
-      }
+        "2019": 73.9
+      },
+      "eu_rank_in_dataset": 1
     }
   }
 }
