@@ -4,18 +4,18 @@
     "indicator": "Maloobchod okrem motorových vozidiel (NACE G47)",
     "unit": "Bázický index, priemer 2021 = 100, stále ceny",
     "source": "Štatistický úrad SR (ob1801ms)",
-    "updated": "2026-07-01T09:51:09Z",
-    "updated_display": "1. 7. 2026",
+    "updated": "2026-07-06T10:13:25Z",
+    "updated_display": "6. 7. 2026",
     "note": "Index 100 = priemer mesiacov roka 2021. Hodnota nad 100 znamená rast oproti základu."
   },
   "latest": {
     "year": "2026",
-    "month": "4.",
-    "month_label": "apríli",
-    "month_short": "apr",
-    "index": 100.8,
-    "yoy_pct": -0.2,
-    "prev_year_index": 101
+    "month": "5.",
+    "month_label": "máji",
+    "month_short": "máj",
+    "index": 102.9,
+    "yoy_pct": 0.9,
+    "prev_year_index": 102
   },
   "annual_avg": {
     "2021": 99.8,
@@ -23,7 +23,7 @@
     "2023": 98.9,
     "2024": 103.4,
     "2025": 102.2,
-    "2026": 96.2
+    "2026": 97.6
   },
   "raw": {
     "2021": {
@@ -101,7 +101,7 @@
       "2.": 89,
       "3.": 105.9,
       "4.": 100.8,
-      "5.": null,
+      "5.": 102.9,
       "6.": null,
       "7.": null,
       "8.": null,
@@ -173,7 +173,7 @@
       "2.": -2.5,
       "3.": 6.1,
       "4.": -0.2,
-      "5.": null,
+      "5.": 0.9,
       "6.": null,
       "7.": null,
       "8.": null,
@@ -184,13 +184,6 @@
     }
   },
   "chart_series": [
-    {
-      "label": "máj 2024",
-      "year": 2024,
-      "month": "5.",
-      "index": 103.8,
-      "yoy": 5.2
-    },
     {
       "label": "jún 2024",
       "year": 2024,
@@ -351,6 +344,13 @@
       "month": "4.",
       "index": 100.8,
       "yoy": -0.2
+    },
+    {
+      "label": "máj 2026",
+      "year": 2026,
+      "month": "5.",
+      "index": 102.9,
+      "yoy": 0.9
     }
   ]
 }
